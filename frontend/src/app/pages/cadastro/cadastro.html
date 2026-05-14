@@ -1,0 +1,18 @@
+<div class="container">
+  <form [formGroup]="formLogin">
+    <h1>Cadastro</h1>
+    <input type="text" placeholder="Nome" formControlName="nome" />
+    <input type="email" placeholder="E-mail" formControlName="email" />
+    <input type="password" placeholder="Senha" formControlName="senha" />
+    <input type="text" placeholder="Telefone" formControlName="telefone" />
+
+    <select formControlName="role">
+      <option value="CLIENTE">Cliente</option>
+      <option value="PROFISSIONAL">Profissional</option>
+    </select>
+
+    <button (click)="cadastrar()">
+      Cadastrar
+    </button>
+  </form>
+</div>

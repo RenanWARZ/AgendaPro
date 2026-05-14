@@ -1,0 +1,18 @@
+<div class="container">
+  <form [formGroup]="form">
+
+    <h1>AgendaPro</h1>
+
+    <input type="email" placeholder="E-mail" formControlName="email" />
+    <input type="password" placeholder="Senha" formControlName="senha" />
+
+    <button type="button" (click)="login()">
+      Entrar
+    </button>
+
+<button type="button" routerLink="/cadastro">
+  Criar conta
+</button>
+
+  </form>
+</div>

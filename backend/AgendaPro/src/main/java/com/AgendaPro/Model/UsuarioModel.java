@@ -1,24 +1,28 @@
 package com.AgendaPro.Model;
-
+import com.AgendaPro.Enums.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuarios")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 
 public class UsuarioModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false, unique = true)
     private String email;
-
+    @Column(nullable = false)
+    private String senha;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private String telefone;
+    private String categoriaServico;
 }
