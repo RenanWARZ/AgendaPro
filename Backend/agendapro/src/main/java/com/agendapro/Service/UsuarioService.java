@@ -26,4 +26,27 @@ public class UsuarioService {
 
         return repository.save(usuario);
     }
+
+    public Usuario login(
+            String email,
+            String senha
+    ) {
+
+        Usuario usuario =
+                repository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new RuntimeException("Usuário não encontrado"));
+
+        boolean senhaCorreta =
+                passwordEncoder.matches(
+                        senha,
+                        usuario.getSenha()
+                );
+
+        if (!senhaCorreta) {
+            throw new RuntimeException("Senha inválida");
+        }
+
+        return usuario;
+    }
 }
