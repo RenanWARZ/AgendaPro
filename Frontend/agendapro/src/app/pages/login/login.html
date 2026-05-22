@@ -1,0 +1,161 @@
+<!-- login.component.html -->
+
+<div class="login-container">
+
+  <!-- LEFT -->
+
+  <div class="left-side">
+
+    <div class="logo">
+      <div class="logo-icon">📅</div>
+      <h2>AgendaPro</h2>
+    </div>
+
+    <div class="badge">
+      ✨ Nova era dos agendamentos
+    </div>
+
+    <h1>
+      Sua agenda,<br>
+      <span>organizada</span> do<br>
+      jeito certo.
+    </h1>
+
+    <p>
+      Reservas, serviços e horários em um só lugar.
+      Para profissionais que valorizam tempo e clientes
+      que amam praticidade.
+    </p>
+
+    <div class="cards">
+
+      <div class="info-card">
+        <h3>⏰ Horários inteligentes</h3>
+        <p>Sem conflitos, sem esforço.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>🛡️ 100% seguro</h3>
+        <p>Dados protegidos ponta a ponta.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+
+  <div class="right-side">
+
+    <div class="login-box">
+
+      <h1>
+        {{ isCadastro ? 'Criar conta' : 'Bem-vindo de volta' }}
+      </h1>
+
+      <p class="subtitle">
+        {{
+        isCadastro
+        ? 'Cadastre-se para começar seus agendamentos.'
+        : 'Entre para gerenciar seus agendamentos.'
+        }}
+      </p>
+
+      <!-- TABS -->
+
+      <div class="tabs">
+
+        <button [class.active]="!isCadastro" (click)="isCadastro = false">
+          Entrar
+        </button>
+
+        <button [class.active]="isCadastro" (click)="isCadastro = true">
+          Cadastrar
+        </button>
+
+      </div>
+
+      <!-- CADASTRO -->
+
+      <div *ngIf="isCadastro">
+
+        <div class="form-group">
+
+          <label>Nome</label>
+
+          <input type="text" placeholder="Seu nome" [(ngModel)]="usuario.nome" />
+
+        </div>
+
+      </div>
+
+      <!-- EMAIL -->
+
+      <div class="form-group">
+
+        <label>E-mail</label>
+
+        <input type="email" placeholder="voce@exemplo.com" [(ngModel)]="email" />
+
+      </div>
+
+      <!-- SENHA -->
+
+      <div class="form-group">
+
+        <label>Senha</label>
+
+        <input type="password" placeholder="********" [(ngModel)]="senha" />
+
+      </div>
+
+      <!-- ROLE -->
+
+      <div class="form-group" *ngIf="isCadastro">
+
+        <label>Tipo de conta</label>
+
+        <select [(ngModel)]="usuario.role">
+
+          <option value="CLIENTE">
+            Cliente
+          </option>
+
+          <option value="PROFISSIONAL">
+            Profissional
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- OPTIONS -->
+
+      <div class="options" *ngIf="!isCadastro">
+
+        <div>
+          <input type="checkbox">
+          Lembrar de mim
+        </div>
+
+        <a href="#">
+          Esqueci minha senha
+        </a>
+
+      </div>
+
+      <!-- BUTTON -->
+
+      <button class="login-button" *ngIf="!isCadastro" (click)="entrar()">
+        Entrar na minha conta →
+      </button>
+
+      <button class="login-button" *ngIf="isCadastro" (click)="cadastrar()">
+        Criar conta →
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
