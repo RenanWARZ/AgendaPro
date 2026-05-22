@@ -1,0 +1,33 @@
+<div class="container">
+
+  <h1>Agendamentos</h1>
+
+  <input type="datetime-local" [(ngModel)]="agendamento.inicio" />
+
+  <button (click)="salvar()">
+    Agendar
+  </button>
+
+  <hr>
+
+  <div *ngFor="let item of agendamentos">
+
+    <h3>
+      {{ item.servico.nome }}
+    </h3>
+
+    <p>
+      {{ item.inicio }}
+    </p>
+
+    <p>
+      {{ item.status }}
+    </p>
+
+    <button (click)="cancelar(item.id)">
+      Cancelar
+    </button>
+
+  </div>
+
+</div>
