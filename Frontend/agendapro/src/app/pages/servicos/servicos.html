@@ -1,0 +1,27 @@
+<div class="container">
+
+  <h1>Serviços</h1>
+
+  <input type="text" placeholder="Nome" [(ngModel)]="servico.nome" />
+
+  <input type="number" placeholder="Preço" [(ngModel)]="servico.preco" />
+
+  <input type="number" placeholder="Duração" [(ngModel)]="servico.duracaoMinutos" />
+
+  <button (click)="salvar()">
+    Salvar
+  </button>
+
+  <hr>
+
+  <div *ngFor="let item of servicos">
+
+    <h3>{{ item.nome }}</h3>
+
+    <p>R$ {{ item.preco }}</p>
+
+    <p>{{ item.duracaoMinutos }} minutos</p>
+
+  </div>
+
+</div>
