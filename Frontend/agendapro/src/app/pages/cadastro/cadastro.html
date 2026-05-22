@@ -1,0 +1,28 @@
+
+<div class="container">
+
+  <h1>Cadastro</h1>
+
+  <input type="text" placeholder="Nome" [(ngModel)]="usuario.nome" />
+
+  <input type="email" placeholder="E-mail" [(ngModel)]="usuario.email" />
+
+  <input type="password" placeholder="Senha" [(ngModel)]="usuario.senha" />
+
+  <select [(ngModel)]="usuario.role">
+
+    <option value="CLIENTE">
+      Cliente
+    </option>
+
+    <option value="PROFISSIONAL">
+      Profissional
+    </option>
+
+  </select>
+
+  <button (click)="cadastrar()">
+    Cadastrar
+  </button>
+
+</div>
