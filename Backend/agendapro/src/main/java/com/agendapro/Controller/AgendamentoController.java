@@ -35,10 +35,9 @@ public class AgendamentoController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<Agendamento>> listar() {
-        return ResponseEntity.ok(
-                service.listar()
-        );
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<Agendamento>> listar(@PathVariable Long id) {
+
+        return ResponseEntity.ok(service.listar(id));
     }
 }
