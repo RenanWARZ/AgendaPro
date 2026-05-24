@@ -1,67 +1,81 @@
-<!-- login.component.html -->
-
 <div class="login-container">
 
-  <!-- LEFT -->
+<div class="left-side">
 
-  <div class="left-side">
+  <div class="background-image"></div>
 
-    <div class="logo">
-      <div class="logo-icon">📅</div>
-      <h2>AgendaPro</h2>
+  <div class="overlay"></div>
+
+  <div class="logo">
+
+    <div class="logo-icon">
+      <img src="assets/Logo.png" alt="Logo AgendaPro">
     </div>
 
-    <div class="badge">
-      ✨ Nova era dos agendamentos
+    <h2>
+      AgendaPro
+    </h2>
+
+  </div>
+
+  <div class="badge">
+    ✨ Nova era dos agendamentos
+  </div>
+
+  <h1>
+
+    Sua agenda,<br>
+
+    <span>
+      organizada
+    </span>
+
+    do jeito certo.
+
+  </h1>
+
+  <p>
+    Reservas, serviços e horários
+    em um só lugar.
+  </p>
+
+  <div class="cards">
+
+    <div class="info-card">
+
+      <h3>
+        ⏰ Horários inteligentes
+      </h3>
+
+      <p>
+        Sem conflitos, sem esforço.
+      </p>
+
     </div>
 
-    <h1>
-      Sua agenda,<br>
-      <span>organizada</span> do<br>
-      jeito certo.
-    </h1>
+    <div class="info-card">
 
-    <p>
-      Reservas, serviços e horários em um só lugar.
-      Para profissionais que valorizam tempo e clientes
-      que amam praticidade.
-    </p>
+      <h3>
+        🛡️ 100% seguro
+      </h3>
 
-    <div class="cards">
-
-      <div class="info-card">
-        <h3>⏰ Horários inteligentes</h3>
-        <p>Sem conflitos, sem esforço.</p>
-      </div>
-
-      <div class="info-card">
-        <h3>🛡️ 100% seguro</h3>
-        <p>Dados protegidos ponta a ponta.</p>
-      </div>
+      <p>
+        Dados protegidos ponta a ponta.
+      </p>
 
     </div>
 
   </div>
 
-  <!-- RIGHT -->
-
+</div>
   <div class="right-side">
-
     <div class="login-box">
 
-      <h1>
-        {{ isCadastro ? 'Criar conta' : 'Bem-vindo de volta' }}
-      </h1>
+      <h1> {{ isCadastro ? 'Criar conta' : 'Bem-vindo de volta' }} </h1>
 
       <p class="subtitle">
-        {{
-        isCadastro
-        ? 'Cadastre-se para começar seus agendamentos.'
-        : 'Entre para gerenciar seus agendamentos.'
-        }}
+        {{ isCadastro ? 'Cadastre-se para começar seus agendamentos.' : 'Entre para gerenciar seus agendamentos.' }}
       </p>
-
-      <!-- TABS -->
 
       <div class="tabs">
 
@@ -75,87 +89,79 @@
 
       </div>
 
-      <!-- CADASTRO -->
-
       <div *ngIf="isCadastro">
 
         <div class="form-group">
 
-          <label>Nome</label>
-
+          <label> Nome </label>
           <input type="text" placeholder="Seu nome" [(ngModel)]="usuario.nome" />
 
         </div>
 
+        <div class="form-group">
+          <label> Tipo de conta </label>
+
+          <select [(ngModel)]="usuario.tipoPessoa" (change)="alterarTipoPessoa()">
+
+            <option value="CPF"> Pessoa Física </option>
+            <option value="CNPJ"> Pessoa Jurídica </option>
+
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="usuario.tipoPessoa === 'CPF'">
+
+          <label> CPF </label>
+          <input type="text" placeholder="000.000.000-00" maxlength="14" [(ngModel)]="usuario.documento"
+            (input)="formatarCPF($event)" />
+
+        </div>
+
+        <div class="form-group" *ngIf="usuario.tipoPessoa === 'CNPJ'">
+
+          <label> CNPJ </label>
+          <input type="text" placeholder="00.000.000/0000-00" maxlength="18" [(ngModel)]="usuario.documento"
+            (input)="formatarCNPJ($event)" />
+
+        </div>
       </div>
 
-      <!-- EMAIL -->
+      <div class="form-group" *ngIf="!isCadastro">
 
-      <div class="form-group">
-
-        <label>E-mail</label>
-
+        <label> E-mail </label>
         <input type="email" placeholder="voce@exemplo.com" [(ngModel)]="email" />
 
       </div>
 
-      <!-- SENHA -->
+      <div class="form-group" *ngIf="isCadastro">
 
-      <div class="form-group">
+        <label> E-mail </label>
+        <input type="email" placeholder="voce@exemplo.com" [(ngModel)]="usuario.email" />
 
-        <label>Senha</label>
+      </div>
 
+      <div class="form-group" *ngIf="!isCadastro">
+
+        <label> Senha </label>
         <input type="password" placeholder="********" [(ngModel)]="senha" />
 
       </div>
 
-      <!-- ROLE -->
-
       <div class="form-group" *ngIf="isCadastro">
 
-        <label>Tipo de conta</label>
-
-        <select [(ngModel)]="usuario.role">
-
-          <option value="CLIENTE">
-            Cliente
-          </option>
-
-          <option value="PROFISSIONAL">
-            Profissional
-          </option>
-
-        </select>
+        <label> Senha </label>
+        <input type="password" placeholder="********" [(ngModel)]="usuario.senha" />
 
       </div>
-
-      <!-- OPTIONS -->
-
-      <div class="options" *ngIf="!isCadastro">
-
-        <div>
-          <input type="checkbox">
-          Lembrar de mim
-        </div>
-
-        <a href="#">
-          Esqueci minha senha
-        </a>
-
-      </div>
-
-      <!-- BUTTON -->
 
       <button class="login-button" *ngIf="!isCadastro" (click)="entrar()">
-        Entrar na minha conta →
+        Entrar na minha conta
       </button>
 
       <button class="login-button" *ngIf="isCadastro" (click)="cadastrar()">
-        Criar conta →
+        Criar conta
       </button>
 
     </div>
-
   </div>
-
 </div>
