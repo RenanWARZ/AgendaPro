@@ -1,85 +1,359 @@
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f7fb;
-}
-
-.container {
-  width: 1000px;
-  margin: 40px auto;
-}
-
-.formulario {
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  margin-bottom: 30px;
-}
-
-h1 {
-  color: #1e293b;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #dcdcdc;
-  outline: none;
-  margin-bottom: 15px;
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-input:focus {
-  border-color: #2563eb;
+body {
+  background: #f5f5f2;
 }
 
-button {
-  padding: 12px 20px;
-  background: #2563eb;
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
   color: white;
-  border: none;
-  border-radius: 10px;
+  width: 280px;
+  height: 100vh;
+  background: #13004d;
+  padding: 35px 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+}
+
+.logo-icon {
+  width: 100px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    transition: 0.3s;
+  }
+
+.logo-icon img {
+  width: 120%;
+  height: 120%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  padding-left: 10px;
+}
+
+.logo h2 {
+  font-size: 28px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+nav a {
+  padding: 16px 20px;
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
-  background: #1d4ed8;
+nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.lista {
-  display: grid;
-  gap: 20px;
+nav .active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+.topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 40px;
 }
 
-.info h3 {
-  margin: 0;
-  color: #1e293b;
+.topbar h1 {
+  font-size: 42px;
+  color: #10231d;
 }
 
-.info p {
-  margin: 5px 0;
-  color: #64748b;
+.topbar p {
+  margin-top: 5px;
+  color: #6b7280;
 }
 
-.cancelar {
+.new-button {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 16px;
+  background: #6D3BFF;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.new-button:hover {
+  background: #5b32e0;
+}
+
+.form-card {
+  background: white;
+  padding: 35px;
+  border-radius: 28px;
+  margin-bottom: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+}
+
+.form-card h2 {
+  margin-bottom: 30px;
+  color: #10231d;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  margin-bottom: 10px;
+  color: #374151;
+  font-weight: bold;
+}
+
+.field input,
+.field select,
+.pagamento-section select {
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.field input:focus,
+.field select:focus,
+.pagamento-section select:focus {
+  border-color: #00563f;
+}
+
+.horarios-section {
+  margin-top: 35px;
+}
+
+.horarios-section h3 {
+  margin-bottom: 20px;
+  color: #10231d;
+}
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 15px;
+}
+
+.horario {
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: rgba(0, 86, 63, 0.08);
+  color: #00563f;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.horario:hover {
+  background: #00563f;
+  color: white;
+}
+
+.horario.selected {
+  background: #00563f;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0, 86, 63, 0.25);
+}
+
+.pagamento-section {
+  margin-top: 35px;
+}
+
+.pagamento-section h3 {
+  margin-bottom: 15px;
+  color: #10231d;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 35px;
+}
+
+.save-button,
+.pay-button {
+  flex: 1;
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-button {
+  background: #00563f;
+}
+
+.save-button:hover {
+  background: #014737;
+}
+
+.pay-button {
+  background: #16a34a;
+}
+
+.pay-button:hover {
+  background: #15803d;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #ef4444;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: 0.3s;
+}
+
+.logout-button:hover {
   background: #dc2626;
 }
 
-.cancelar:hover {
+.agendamentos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.agendamento-card {
+  background: white;
+  padding: 28px;
+  border-radius: 28px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  transition: 0.3s;
+}
+
+.agendamento-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 16px;
+  background: rgba(0, 86, 63, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+
+.user-info h3 {
+  color: #10231d;
+  margin-bottom: 5px;
+}
+
+.user-info span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.status {
+  padding: 10px 16px;
+  border-radius: 30px;
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.card-body {
+  margin-bottom: 25px;
+}
+
+.info {
+  margin-bottom: 15px;
+}
+
+.info strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #10231d;
+}
+
+.info p {
+  color: #6b7280;
+}
+
+.cancel-button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cancel-button:hover {
   background: #b91c1c;
 }
