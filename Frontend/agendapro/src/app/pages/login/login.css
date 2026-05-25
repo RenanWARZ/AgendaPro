@@ -17,15 +17,25 @@ body {
 
 .left-side {
   width: 50%;
-  background: linear-gradient(180deg,
-      #012c25,
-      #001b16);
-  color: white;
-  padding: 60px;
   position: relative;
+  overflow: hidden;
+  padding: 60px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: white;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/Fundo.png');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
 }
 
 .logo {
@@ -34,23 +44,44 @@ body {
   left: 60px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  z-index: 10;
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
-  background: #f7b34d;
-  border-radius: 50%;
+  width: 100px;
+  border-radius: 22px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  transition: 0.3s;
+}
+
+.logo-icon:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .logo-icon img {
-  width: 50px;
-  height: 50px;
+  width: 120%;
+  height: 120%;
   object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  padding-left: 10px;
+}
+
+.logo h2 {
+  font-size: 34px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -1px;
+  margin: 0;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
 }
 
 .badge {
@@ -167,7 +198,8 @@ body {
   font-weight: 600;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 18px;
   border-radius: 18px;
@@ -177,7 +209,7 @@ body {
 }
 
 .form-group input:focus {
-  border-color: #0b5d4b;
+  border-color: #4C1D95;
 }
 
 .options {
@@ -190,7 +222,7 @@ body {
 
 .options a {
   text-decoration: none;
-  color: #0b5d4b;
+  color: #4C1D95;
   font-weight: bold;
 }
 
@@ -199,7 +231,7 @@ body {
   padding: 18px;
   border: none;
   border-radius: 18px;
-  background: #00563f;
+  background: #4C1D95;
   color: white;
   font-size: 16px;
   font-weight: bold;

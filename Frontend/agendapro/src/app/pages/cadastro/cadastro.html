@@ -1,28 +1,196 @@
+<!-- cadastro.component.html -->
 
-<div class="container">
+<div class="page">
 
-  <h1>Cadastro</h1>
+  <!-- LEFT -->
 
-  <input type="text" placeholder="Nome" [(ngModel)]="usuario.nome" />
+  <div class="left-side">
 
-  <input type="email" placeholder="E-mail" [(ngModel)]="usuario.email" />
+    <div class="overlay"></div>
 
-  <input type="password" placeholder="Senha" [(ngModel)]="usuario.senha" />
+    <div class="left-content">
 
-  <select [(ngModel)]="usuario.role">
+      <!-- LOGO -->
 
-    <option value="CLIENTE">
-      Cliente
-    </option>
+      <div class="logo">
 
-    <option value="PROFISSIONAL">
-      Profissional
-    </option>
+        <div class="logo-icon">
+          📅
+        </div>
 
-  </select>
+        <h2>
+          AgendaPro
+        </h2>
 
-  <button (click)="cadastrar()">
-    Cadastrar
-  </button>
+      </div>
+
+      <!-- BADGE -->
+
+      <span class="badge">
+        ✨ Nova era dos agendamentos
+      </span>
+
+      <!-- TITLE -->
+
+      <h1>
+
+        Sua agenda,
+
+        <span>
+          organizada
+        </span>
+
+        do jeito certo.
+
+      </h1>
+
+      <!-- DESCRIPTION -->
+
+      <p>
+
+        Reservas, serviços e horários
+        em um só lugar.
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+
+  <div class="right-side">
+
+    <div class="card">
+
+      <!-- TOP -->
+
+      <h1>
+        Criar conta
+      </h1>
+
+      <p class="subtitle">
+        Cadastre-se para começar seus agendamentos.
+      </p>
+
+      <!-- SWITCH -->
+
+      <div class="switch">
+
+        <button routerLink="/login">
+
+          Entrar
+
+        </button>
+
+        <button class="active">
+
+          Cadastrar
+
+        </button>
+
+      </div>
+
+      <!-- FORM -->
+
+      <div class="form">
+
+        <!-- NOME -->
+
+        <div class="field">
+
+          <label>
+            Nome
+          </label>
+
+          <input type="text" placeholder="Seu nome" [(ngModel)]="usuario.nome" />
+
+        </div>
+
+        <!-- EMAIL -->
+
+        <div class="field">
+
+          <label>
+            E-mail
+          </label>
+
+          <input type="email" placeholder="voce@exemplo.com" [(ngModel)]="usuario.email" />
+
+        </div>
+
+        <!-- SENHA -->
+
+        <div class="field">
+
+          <label>
+            Senha
+          </label>
+
+          <input type="password" placeholder="********" [(ngModel)]="usuario.senha" />
+
+        </div>
+
+        <!-- TIPO -->
+
+        <div class="field">
+
+          <label>
+            Tipo de conta
+          </label>
+
+          <select [(ngModel)]="usuario.tipoPessoa" (change)="alterarTipoPessoa()">
+
+            <option value="CPF">
+              Pessoa Física
+            </option>
+
+            <option value="CNPJ">
+              Pessoa Jurídica
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- CPF -->
+
+        <div class="field" *ngIf="usuario.tipoPessoa === 'CPF'">
+
+          <label>
+            CPF
+          </label>
+
+          <input type="text" placeholder="000.000.000-00" maxlength="14" [(ngModel)]="usuario.documento"
+            (input)="formatarCPF($event)" />
+
+        </div>
+
+        <!-- CNPJ -->
+
+        <div class="field" *ngIf="usuario.tipoPessoa === 'CNPJ'">
+
+          <label>
+            CNPJ
+          </label>
+
+          <input type="text" placeholder="00.000.000/0000-00" maxlength="18" [(ngModel)]="usuario.documento"
+            (input)="formatarCNPJ($event)" />
+
+        </div>
+
+        <!-- BUTTON -->
+
+        <button class="submit-button" (click)="cadastrar()">
+
+          Criar conta →
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>

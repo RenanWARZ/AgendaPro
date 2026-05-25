@@ -11,9 +11,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './servicos.html',
   styleUrl: './servicos.css',
 })
-
 export class Servicos implements OnInit {
   servicos: any[] = [];
+  role = '';
 
   servico = {
     nome: '',
@@ -24,6 +24,9 @@ export class Servicos implements OnInit {
   constructor(private service: ServicoService) {}
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.role = localStorage.getItem('role') || '';
+    }
     this.listar();
   }
 

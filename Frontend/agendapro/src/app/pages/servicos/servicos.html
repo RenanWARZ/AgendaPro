@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page" *ngIf="role === 'ADMIN'">
 
   <aside class="sidebar">
 
@@ -14,12 +14,20 @@
 
     <nav>
 
+      <a routerLink="/agendamentos">
+        Agendamentos
+      </a>
+
       <a class="active">
         Serviços
       </a>
 
-      <a routerLink="/agendamentos">
-        Agendamentos
+      <a routerLink="/clientes">
+        Clientes
+      </a>
+
+      <a>
+        Configurações
       </a>
 
     </nav>
@@ -28,8 +36,6 @@
 
 
   <main class="content">
-
-    <!-- TOP -->
 
     <div class="topbar">
 
@@ -51,40 +57,22 @@
 
     </div>
 
-    <!-- FORM -->
-
     <div class="form-card">
-
       <h2>
         Criar serviço
       </h2>
 
       <div class="form-grid">
 
-        <input
-          type="text"
-          placeholder="Nome do serviço"
-          [(ngModel)]="servico.nome"
-        />
+        <input type="text" placeholder="Nome do serviço" [(ngModel)]="servico.nome" />
 
-        <input
-          type="number"
-          placeholder="Preço"
-          [(ngModel)]="servico.preco"
-        />
+        <input type="number" placeholder="Preço" [(ngModel)]="servico.preco" />
 
-        <input
-          type="number"
-          placeholder="Duração em minutos"
-          [(ngModel)]="servico.duracaoMinutos"
-        />
+        <input type="number" placeholder="Duração em minutos" [(ngModel)]="servico.duracaoMinutos" />
 
       </div>
 
-      <button
-        class="save-button"
-        (click)="salvar()"
-      >
+      <button class="save-button" (click)="salvar()">
         Salvar serviço
       </button>
 
@@ -94,10 +82,7 @@
 
     <div class="services-grid">
 
-      <div
-        class="service-card"
-        *ngFor="let item of servicos"
-      >
+      <div class="service-card" *ngFor="let item of servicos">
 
         <div class="service-header">
 
