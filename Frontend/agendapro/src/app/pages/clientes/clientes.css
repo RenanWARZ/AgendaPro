@@ -1,0 +1,182 @@
+/* clientes.component.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: #f5f5f2;
+}
+
+/* PAGE */
+
+.page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 280px;
+
+  background: linear-gradient(180deg,
+      #012c25,
+      #001b16);
+
+  color: white;
+
+  padding: 40px 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 60px;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+  background: #f7b34d;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo h2 {
+  font-size: 28px;
+}
+
+/* NAV */
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+nav a {
+  padding: 16px 20px;
+
+  border-radius: 14px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  text-decoration: none;
+
+  transition: 0.3s;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+nav .active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* CONTENT */
+
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+.topbar {
+  margin-bottom: 40px;
+}
+
+.topbar h1 {
+  font-size: 42px;
+  color: #10231d;
+}
+
+.topbar p {
+  margin-top: 5px;
+  color: #6b7280;
+}
+
+/* GRID */
+
+.clientes-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(320px, 1fr));
+
+  gap: 25px;
+}
+
+/* CARD */
+
+.cliente-card {
+  background: white;
+
+  padding: 28px;
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.05);
+
+  transition: 0.3s;
+}
+
+.cliente-card:hover {
+  transform: translateY(-5px);
+}
+
+.cliente-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+.avatar {
+  width: 55px;
+  height: 55px;
+
+  border-radius: 16px;
+
+  background: rgba(0, 86, 63, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 26px;
+}
+
+.cliente-header h3 {
+  color: #10231d;
+  margin-bottom: 5px;
+}
+
+.cliente-header span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.info strong {
+  display: block;
+  margin-bottom: 5px;
+
+  color: #10231d;
+}
+
+.info p {
+  color: #6b7280;
+}
