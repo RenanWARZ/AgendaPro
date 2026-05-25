@@ -1,0 +1,80 @@
+<div class="page">
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">
+        📅
+      </div>
+      <h2>
+        AgendaPro
+      </h2>
+    </div>
+    <nav>
+
+      <a routerLink="/agendamentos">
+        Agendamentos
+      </a>
+
+      <a routerLink="/servicos">
+        Serviços
+      </a>
+
+      <a class="active">
+        Clientes
+      </a>
+
+      <a routerLink="/">
+        Configurações
+      </a>
+
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="topbar">
+      <div>
+        <h1>
+          Clientes
+        </h1>
+        <p>
+          Clientes cadastrados no sistema.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="clientes-grid">
+      <div class="cliente-card" *ngFor="let item of clientes">
+        <div class="cliente-header">
+          <div class="avatar">
+            👤
+          </div>
+          <div>
+
+            <h3>
+              {{ item.nome }}
+            </h3>
+
+            <span>
+              {{ item.role }}
+            </span>
+          </div>
+        </div>
+
+        <div class="cliente-body">
+          <div class="info">
+
+            <strong>
+              E-mail
+            </strong>
+
+            <p>
+              {{ item.email }}
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
