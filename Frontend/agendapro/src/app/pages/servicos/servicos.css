@@ -1,76 +1,256 @@
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f7fb;
-}
-
-.container {
-  width: 900px;
-  margin: 40px auto;
-}
-
-.formulario {
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  margin-bottom: 30px;
-}
-
-h1 {
-  color: #1e293b;
-  margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  border: 1px solid #dcdcdc;
-  outline: none;
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-input:focus {
-  border-color: #2563eb;
+body {
+  background: #f5f5f2;
 }
 
-button {
+/* PAGE */
+
+.page {
   width: 100%;
-  padding: 14px;
-  background: #2563eb;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg,
+      #012c25,
+      #001b16);
+
   color: white;
-  border: none;
-  border-radius: 10px;
+  padding: 40px 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+}
+
+.logo-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #f7b34d;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo h2 {
+  font-size: 28px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+nav a {
+  padding: 16px 20px;
+  border-radius: 14px;
   cursor: pointer;
+  transition: 0.3s;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+nav .active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* CONTENT */
+
+.content {
+  flex: 1;
+  padding: 40px;
+}
+
+/* TOPBAR */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 40px;
+}
+
+.topbar h1 {
+  font-size: 42px;
+  color: #10231d;
+}
+
+.topbar p {
+  color: #6b7280;
+  margin-top: 5px;
+}
+
+.new-button {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 14px;
+  background: #00563f;
+  color: white;
   font-size: 15px;
+  cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
-  background: #1d4ed8;
+.new-button:hover {
+  background: #014737;
 }
 
-.cards {
+/* FORM */
+
+.form-card {
+  background: white;
+  padding: 35px;
+  border-radius: 28px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.05);
+
+  margin-bottom: 40px;
+}
+
+.form-card h2 {
+  margin-bottom: 25px;
+  color: #10231d;
+}
+
+.form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.card {
+.form-grid input {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+  font-size: 15px;
+}
+
+.form-grid input:focus {
+  border-color: #00563f;
+}
+
+.save-button {
+  margin-top: 25px;
+  padding: 18px 30px;
+
+  border: none;
+  border-radius: 16px;
+
+  background: #00563f;
+  color: white;
+
+  font-size: 15px;
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.save-button:hover {
+  background: #014737;
+}
+
+/* SERVICES */
+
+.services-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 25px;
+}
+
+.service-card {
   background: white;
-  padding: 25px;
+  padding: 28px;
+  border-radius: 28px;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.05);
+
+  transition: 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  margin-bottom: 25px;
+}
+
+.service-icon {
+  width: 60px;
+  height: 60px;
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  background: rgba(0, 86, 63, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
 }
 
-.card h3 {
-  margin: 0;
-  color: #1e293b;
+.service-header h3 {
+  color: #10231d;
+  margin-bottom: 5px;
 }
 
-.card p {
-  color: #64748b;
+.service-header span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00563f;
+
+  margin-bottom: 20px;
+}
+
+.details-button {
+  width: 100%;
+  padding: 15px;
+
+  border-radius: 14px;
+  border: none;
+
+  background: #f5f5f2;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.details-button:hover {
+  background: #ecece7;
 }

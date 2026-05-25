@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ServicoService } from '../../../service/servico.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-servicos',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './servicos.html',
   styleUrl: './servicos.css',
 })

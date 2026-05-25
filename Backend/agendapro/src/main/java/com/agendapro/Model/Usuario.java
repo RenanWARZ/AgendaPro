@@ -1,6 +1,7 @@
 package com.agendapro.Model;
 
 import com.agendapro.Enum.Role;
+import com.agendapro.Enum.TipoPessoa;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +21,16 @@ public class Usuario {
 
     private String nome;
 
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String email;
 
     private String senha;
+
+    @Column(unique = true, nullable = false)
+    private String documento;
+
+    @Enumerated(EnumType.STRING)
+    private TipoPessoa tipoPessoa;
 
     @Enumerated(EnumType.STRING)
     private Role role;

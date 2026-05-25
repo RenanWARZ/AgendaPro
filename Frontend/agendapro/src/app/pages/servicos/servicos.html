@@ -1,27 +1,135 @@
-<div class="container">
+<div class="page">
 
-  <h1>Serviços</h1>
+  <aside class="sidebar">
 
-  <input type="text" placeholder="Nome" [(ngModel)]="servico.nome" />
+    <div class="logo">
 
-  <input type="number" placeholder="Preço" [(ngModel)]="servico.preco" />
+      <div class="logo-icon">
+        📅
+      </div>
 
-  <input type="number" placeholder="Duração" [(ngModel)]="servico.duracaoMinutos" />
+      <h2>AgendaPro</h2>
 
-  <button (click)="salvar()">
-    Salvar
-  </button>
+    </div>
 
-  <hr>
+    <nav>
 
-  <div *ngFor="let item of servicos">
+      <a class="active">
+        Serviços
+      </a>
 
-    <h3>{{ item.nome }}</h3>
+      <a routerLink="/agendamentos">
+        Agendamentos
+      </a>
 
-    <p>R$ {{ item.preco }}</p>
+    </nav>
 
-    <p>{{ item.duracaoMinutos }} minutos</p>
+  </aside>
 
-  </div>
 
+  <main class="content">
+
+    <!-- TOP -->
+
+    <div class="topbar">
+
+      <div>
+
+        <h1>
+          Serviços
+        </h1>
+
+        <p>
+          Gerencie seus serviços e horários.
+        </p>
+
+      </div>
+
+      <button class="new-button">
+        + Novo serviço
+      </button>
+
+    </div>
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+      <h2>
+        Criar serviço
+      </h2>
+
+      <div class="form-grid">
+
+        <input
+          type="text"
+          placeholder="Nome do serviço"
+          [(ngModel)]="servico.nome"
+        />
+
+        <input
+          type="number"
+          placeholder="Preço"
+          [(ngModel)]="servico.preco"
+        />
+
+        <input
+          type="number"
+          placeholder="Duração em minutos"
+          [(ngModel)]="servico.duracaoMinutos"
+        />
+
+      </div>
+
+      <button
+        class="save-button"
+        (click)="salvar()"
+      >
+        Salvar serviço
+      </button>
+
+    </div>
+
+    <!-- LIST -->
+
+    <div class="services-grid">
+
+      <div
+        class="service-card"
+        *ngFor="let item of servicos"
+      >
+
+        <div class="service-header">
+
+          <div class="service-icon">
+            ✂️
+          </div>
+
+          <div>
+
+            <h3>
+              {{ item.nome }}
+            </h3>
+
+            <span>
+              {{ item.duracaoMinutos }} minutos
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="price">
+
+          R$ {{ item.preco }}
+
+        </div>
+
+        <button class="details-button">
+          Ver detalhes
+        </button>
+
+      </div>
+    </div>
+  </main>
 </div>
