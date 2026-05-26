@@ -1,120 +1,81 @@
 <div class="page" *ngIf="role === 'ADMIN'">
-
   <aside class="sidebar">
-
     <div class="logo">
-
-      <div class="logo-icon">
-        📅
-      </div>
+      <div class="logo-icon">📅</div>
 
       <h2>AgendaPro</h2>
-
     </div>
 
     <nav>
+      <a routerLink="/agendamentos"> Agendamentos </a>
 
-      <a routerLink="/agendamentos">
-        Agendamentos
-      </a>
+      <a class="active"> Serviços </a>
 
-      <a class="active">
-        Serviços
-      </a>
+      <a routerLink="/clientes"> Clientes </a>
 
-      <a routerLink="/clientes">
-        Clientes
-      </a>
-
-      <a>
-        Configurações
-      </a>
-
+      <a> Configurações </a>
     </nav>
-
   </aside>
 
-
   <main class="content">
-
     <div class="topbar">
-
       <div>
+        <h1>Serviços</h1>
 
-        <h1>
-          Serviços
-        </h1>
-
-        <p>
-          Gerencie seus serviços e horários.
-        </p>
-
+        <p>Gerencie seus serviços e horários.</p>
       </div>
 
-      <button class="new-button">
-        + Novo serviço
-      </button>
-
+      <button class="new-button">+ Novo serviço</button>
     </div>
 
     <div class="form-card">
-      <h2>
-        Criar serviço
-      </h2>
+      <h2>Criar serviço</h2>
 
       <div class="form-grid">
-
         <input type="text" placeholder="Nome do serviço" [(ngModel)]="servico.nome" />
-
+        <input type="text" placeholder="Descrição do serviço" [(ngModel)]="servico.descricao" />
+        <input type="text" placeholder="Endereço" [(ngModel)]="servico.endereco" />
+        <input type="text" placeholder="URL da foto" [(ngModel)]="servico.foto" />
         <input type="number" placeholder="Preço" [(ngModel)]="servico.preco" />
-
-        <input type="number" placeholder="Duração em minutos" [(ngModel)]="servico.duracaoMinutos" />
-
+        <input
+          type="number"
+          placeholder="Duração em minutos"
+          [(ngModel)]="servico.duracaoMinutos"
+        />
       </div>
 
       <button class="save-button" (click)="salvar()">
-        Salvar serviço
+        {{ editando ? 'Atualizar serviço' : 'Salvar serviço' }}
       </button>
-
     </div>
 
-    <!-- LIST -->
-
     <div class="services-grid">
-
       <div class="service-card" *ngFor="let item of servicos">
-
         <div class="service-header">
-
-          <div class="service-icon">
-            ✂️
-          </div>
+          <div class="service-icon"><i class="bi bi-award-fill"></i></div>
 
           <div>
-
-            <h3>
-              {{ item.nome }}
-            </h3>
-
-            <span>
-              {{ item.duracaoMinutos }} minutos
-            </span>
-
+            <img [src]="item.foto" class="service-image" alt="Foto" />
+            <h3>{{ item.nome }}</h3>
+            <h4>{{ item.descricao }}</h4>
+            <a [href]="'https://www.google.com/maps/search/?api=1&query=' + item.endereco" target="_blank" class="address-link">
+              <i class="bi bi-geo-alt"></i> {{ item.endereco }}
+            </a><br>
+            <span>{{ item.duracaoMinutos }} minutos</span>
           </div>
-
         </div>
 
-        <div class="price">
+        <div class="price">R$ {{ item.preco }}</div>
 
-          R$ {{ item.preco }}
+        <div class="card-buttons">
+          <button class="edit-button" (click)="editar(item)">Editar</button>
 
+          <button class="delete-button" (click)="excluir(item.id)">Excluir</button>
         </div>
 
-        <button class="details-button">
-          Ver detalhes
-        </button>
-
+        <!-- <button class="details-button">Ver detalhes</button> -->
       </div>
     </div>
   </main>
 </div>
+

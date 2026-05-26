@@ -1,12 +1,17 @@
 <div class="page">
+
   <aside class="sidebar">
 
     <div class="logo">
-    <div class="logo-icon">
-      <img src="assets/Logo.png" alt="Logo AgendaPro">
-    </div>
 
-      <h2>AgendaPro</h2>
+      <div class="logo-icon">
+        <img src="assets/logo.png" alt="Logo AgendaPro">
+      </div>
+
+      <h2>
+        AgendaPro
+      </h2>
+
     </div>
 
     <nav>
@@ -15,28 +20,39 @@
         Agendamentos
       </a>
 
-      <a *ngIf="role === 'ADMIN'" routerLink="/servicos">
+      <a
+        *ngIf="role === 'ADMIN'"
+        routerLink="/servicos"
+      >
         Serviços
       </a>
 
-      <a *ngIf="role === 'ADMIN'" routerLink="/clientes">
+      <a
+        *ngIf="role === 'ADMIN'"
+        routerLink="/clientes"
+      >
         Clientes
       </a>
 
-      <a routerLink="/">
+      <a>
         Configurações
       </a>
 
     </nav>
 
-    <button class="logout-button" (click)="sair()">
+    <button
+      class="logout-button"
+      (click)="sair()"
+    >
       Sair
     </button>
 
   </aside>
 
   <main class="content">
+
     <div class="topbar">
+
       <div>
 
         <h1>
@@ -44,47 +60,100 @@
         </h1>
 
         <p>
-          Gerencie reservas, horários e pagamentos.
+          Escolha um serviço e agende seu horário.
         </p>
 
       </div>
 
-      <button class="new-button">
-        + Novo agendamento
-      </button>
+    </div>
+
+    <div class="servicos-section">
+
+      <h2>
+        Escolha um serviço
+      </h2>
+
+      <div class="servicos-grid">
+
+        <div
+          class="servico-card"
+          *ngFor="let item of servicos"
+          [class.selected]="agendamento.servico.id === item.id"
+          (click)="selecionarServico(item)"
+        >
+
+          <img
+            [src]="item.foto"
+            alt="Foto serviço"
+          >
+
+          <h3>
+            {{ item.nome }}
+          </h3>
+
+          <p>
+            {{ item.descricao }}
+          </p>
+
+          <span>
+            {{ item.duracaoMinutos }} minutos
+          </span>
+
+          <strong>
+            R$ {{ item.preco }}
+          </strong>
+
+        </div>
+
+      </div>
 
     </div>
 
-    <div *ngIf="role === 'ADMIN'" class="form-card">
+    <div
+      class="form-card"
+      *ngIf="agendamento.servico.id !== 0"
+    >
 
       <h2>
-        Criar agendamento
+        Finalizar agendamento
       </h2>
 
       <div class="form-grid">
+
         <div class="field">
 
           <label>
             Data
           </label>
 
-          <input type="date" [(ngModel)]="dataSelecionada" />
+          <input
+            type="date"
+            [(ngModel)]="dataSelecionada"
+          />
 
         </div>
 
-        <div class="field">
+        <div
+          class="field"
+          *ngIf="role === 'ADMIN'"
+        >
 
           <label>
             Cliente
           </label>
 
-          <select [(ngModel)]="agendamento.cliente.id">
+          <select
+            [(ngModel)]="agendamento.cliente.id"
+          >
 
             <option [ngValue]="0">
               Selecione um cliente
             </option>
 
-            <option *ngFor="let item of clientes" [ngValue]="item.id">
+            <option
+              *ngFor="let item of clientes"
+              [ngValue]="item.id"
+            >
 
               {{ item.nome }}
 
@@ -94,26 +163,6 @@
 
         </div>
 
-        <div class="field">
-
-          <label>
-            Serviço
-          </label>
-
-          <select [(ngModel)]="agendamento.servico.id">
-
-            <option [ngValue]="0">
-              Selecione um serviço
-            </option>
-
-            <option *ngFor="let item of servicos" [ngValue]="item.id">
-
-              {{ item.nome }}
-
-            </option>
-
-          </select>
-        </div>
       </div>
 
       <div class="horarios-section">
@@ -124,15 +173,20 @@
 
         <div class="horarios-grid">
 
-          <button *ngFor="let horario of horarios" class="horario"
-            [class.selected]="horarioSelecionado?.id === horario.id" (click)="selecionarHorario(horario)">
+          <button
+            *ngFor="let horario of horarios"
+            class="horario"
+            [class.selected]="horarioSelecionado?.id === horario.id"
+            (click)="selecionarHorario(horario)"
+          >
 
             {{ horario.hora }}
+
           </button>
 
         </div>
-      </div>
 
+      </div>
 
       <div class="pagamento-section">
 
@@ -140,7 +194,9 @@
           Método de pagamento
         </h3>
 
-        <select [(ngModel)]="pagamento.metodo">
+        <select
+          [(ngModel)]="pagamento.metodo"
+        >
 
           <option value="PIX">
             PIX
@@ -151,44 +207,70 @@
           </option>
 
         </select>
+
       </div>
 
       <div class="buttons">
 
-        <button class="save-button" (click)="salvar()">
+        <button
+          class="save-button"
+          (click)="salvar()"
+        >
           Confirmar agendamento
         </button>
 
-        <button class="pay-button" (click)="pagar()">
+        <button
+          class="pay-button"
+          (click)="pagar()"
+        >
           Confirmar pagamento
         </button>
 
       </div>
+
     </div>
 
-
     <div class="agendamentos-grid">
-      <div class="agendamento-card" *ngFor="let item of agendamentos">
+
+      <div
+        class="agendamento-card"
+        *ngFor="let item of agendamentos"
+      >
 
         <div class="card-header">
+
           <div class="user-info">
 
-            <div class="avatar"> 👤 </div>
+            <div class="avatar">
+              👤
+            </div>
 
             <div>
-              <h3>{{ item.cliente?.nome }} </h3>
-              <span> {{ item.servico?.nome }} </span>
+
+              <h3>
+                {{ item.cliente?.nome }}
+              </h3>
+
+              <span>
+                {{ item.servico?.nome }}
+              </span>
+
             </div>
 
           </div>
 
-          <div class="status"> {{ item.status }} </div>
+          <div class="status">
+
+            {{ item.status }}
+
+          </div>
 
         </div>
 
-
         <div class="card-body">
+
           <div class="info">
+
             <strong>
               Horário
             </strong>
@@ -213,9 +295,11 @@
 
         </div>
 
-        <!-- FOOTER -->
-
-        <button class="cancel-button" (click)="cancelar(item.id)">
+        <button
+          *ngIf="role === 'ADMIN'"
+          class="cancel-button"
+          (click)="cancelar(item.id)"
+        >
           Cancelar reserva
         </button>
 
