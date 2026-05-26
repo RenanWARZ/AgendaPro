@@ -2,11 +2,8 @@ package com.agendapro.Model;
 
 import com.agendapro.Enum.Role;
 import com.agendapro.Enum.TipoPessoa;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "usuarios")

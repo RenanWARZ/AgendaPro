@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
-
 import { CommonModule } from '@angular/common';
-
 import { Router, RouterLink } from '@angular/router';
-
+import { ChangeDetectorRef } from '@angular/core';
 import Swal from 'sweetalert2';
-
 import { ServicoService } from '../../../service/servico.service';
 
 @Component({
@@ -19,57 +15,58 @@ import { ServicoService } from '../../../service/servico.service';
 })
 export class Servicos implements OnInit {
   servicos: any[] = [];
-
   role = '';
-
   editando = false;
-
   servicoEditandoId = 0;
 
   servico = {
     nome: '',
-
     descricao: '',
-
     endereco: '',
-
     foto: '',
-
-    preco: '',
-
-    duracaoMinutos: '',
-
-    profissional: {
-      id: 0,
-    },
+    preco: 0,
+    duracaoMinutos: 0,
+    profissional: { id: 0 },
   };
 
   constructor(
     private service: ServicoService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.role = localStorage.getItem('role') || '';
+
+      this.listarServicos();
     }
-
-    this.listarServicos();
   }
-
+  
   listarServicos() {
-    const usuarioId = localStorage.getItem('usuarioId');
+    const usuarioId = Number(localStorage.getItem('usuarioId'));
 
-    this.service.listarServico(usuarioId).subscribe((res: any) => {
-      this.servicos = res;
+    this.service.listarServico(usuarioId).subscribe({
+      next: (res: any) => {
+        this.servicos = res;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.log(err);
+      },
     });
   }
-
 
   salvar() {
     const usuarioId = localStorage.getItem('usuarioId');
 
     this.servico.profissional.id = Number(usuarioId);
+
+    const precoFormatado = this.servico.preco.toString().replace(/\./g, '').replace(',', '.');
+
+    this.servico.preco = Number(precoFormatado);
 
     if (!this.servico.nome) {
       Swal.fire({
@@ -195,20 +192,12 @@ export class Servicos implements OnInit {
 
     this.servico = {
       nome: '',
-
       descricao: '',
-
       endereco: '',
-
       foto: '',
-
-      preco: '',
-
-      duracaoMinutos: '',
-
-      profissional: {
-        id: 0,
-      },
+      preco: 0,
+      duracaoMinutos: 0,
+      profissional: { id: 0 },
     };
   }
 

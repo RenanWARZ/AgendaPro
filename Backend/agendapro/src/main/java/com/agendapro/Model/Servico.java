@@ -20,7 +20,7 @@ public class Servico {
     private String nome;
     private String descricao;
     private String endereco;
-    private Double preco;
+    private Integer preco;
     private Integer duracaoMinutos;
 
     @Column(length = 800)
