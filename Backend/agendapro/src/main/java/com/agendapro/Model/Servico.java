@@ -15,13 +15,16 @@ public class Servico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-
     private String nome;
-
+    private String descricao;
+    private String endereco;
     private Double preco;
-
     private Integer duracaoMinutos;
+
+    @Column(length = 800)
+    private String foto;
 
     @ManyToOne
     @JoinColumn(name = "profissional_id")
