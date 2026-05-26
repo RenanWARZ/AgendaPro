@@ -28,8 +28,25 @@ public class ServicoController {
 
     @GetMapping
     public ResponseEntity<List<Servico>> listar() {
-        return ResponseEntity.ok(
-                service.listar()
-        );
+        return ResponseEntity.ok(service.listarTodos());
+    }
+
+    @GetMapping("/profissional/{id}")
+    public ResponseEntity<List<Servico>> listar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.listarTodos());
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Servico> editar(@PathVariable Long id,@RequestBody Servico servico) {
+
+        return ResponseEntity.ok(service.editar(id, servico));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+
+        return ResponseEntity.ok().build();
     }
 }
