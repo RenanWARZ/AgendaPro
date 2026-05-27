@@ -1,5 +1,6 @@
 package com.agendapro.Service;
 
+import com.agendapro.DTO.HorarioDTO;
 import com.agendapro.Model.Agendamento;
 import com.agendapro.Model.Servico;
 import com.agendapro.Model.Usuario;
@@ -8,7 +9,12 @@ import com.agendapro.Repository.ServicoRepository;
 import com.agendapro.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,5 +70,61 @@ public class AgendamentoService {
         }
 
         return repository.findByClienteId(id);
+    }
+
+
+    public List<HorarioDTO> listarHorarios(Long servicoId, LocalDate data) {
+
+        Servico servico = servicoRepository.findById(servicoId).orElseThrow();
+
+        DayOfWeek diaSemana = data.getDayOfWeek();
+
+        String dia = diaSemana.name();
+
+        if (!servico.getDiasFuncionamento().contains(dia)) {
+            return new ArrayList<>();
+        }
+
+        LocalTime inicio = LocalTime.parse(servico.getHoraInicio());
+        LocalTime fim = LocalTime.parse(servico.getHoraFim());
+
+        int intervalo = servico.getIntervaloMinutos();
+
+        List<Agendamento> agendamentos =
+
+                repository
+                        .findByServicoProfissionalIdAndInicioBetween(
+
+                                servico.getProfissional().getId(),
+
+                                data.atStartOfDay(),
+
+                                data.atTime(23, 59)
+
+                        );
+
+        List<HorarioDTO> horarios =new ArrayList<>();
+
+        while (!inicio.isAfter(fim)) {
+
+            LocalTime horarioAtual = inicio;
+
+            boolean ocupado = agendamentos.stream().anyMatch(
+                    a -> a.getInicio()
+                            .toLocalTime()
+                            .equals(horarioAtual)
+            );
+
+            horarios.add(
+                    new HorarioDTO(
+                            horarioAtual.toString(),
+                            !ocupado
+                    )
+            );
+
+            inicio = inicio.plusMinutes(intervalo);
+        }
+
+        return horarios;
     }
 }
