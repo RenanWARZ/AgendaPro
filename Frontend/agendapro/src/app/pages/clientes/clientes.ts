@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ClienteService } from '../../../service/cliente.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -9,30 +9,29 @@ import { RouterLink } from '@angular/router';
   templateUrl: './clientes.html',
   styleUrl: './clientes.css',
 })
-
 export class Clientes implements OnInit {
-
   clientes: any[] = [];
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(private clienteService: ClienteService, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      this.listar();
-    }
+    this.listar();
+    this.cd.detectChanges();
   }
 
   listar() {
     this.clienteService.listar().subscribe({
       next: (res: any) => {
-        this.clientes = res;
+        console.log(res);
 
-        console.log(this.clientes);
+        this.clientes = res;
+        this.cd.detectChanges();
       },
 
       error: (err) => {
         console.log(err);
       },
+
     });
   }
 }
