@@ -14,6 +14,10 @@ export class AgendamentoService {
     return this.http.get(`${this.api}/agendamentos/usuario/${usuarioId}`);
   }
 
+  listarHorarios(servicoId: number, data: string) {
+    return this.http.get(`${this.api}/agendamentos/horarios?servicoId=${servicoId}&data=${data}`);
+  }
+
   salvar(agendamento: any) {
     return this.http.post(`${this.api}/agendamentos`, agendamento);
   }

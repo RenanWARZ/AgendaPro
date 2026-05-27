@@ -5,7 +5,10 @@
     <div class="logo">
 
       <div class="logo-icon">
-        <img src="assets/logo.png" alt="Logo AgendaPro">
+        <img
+          src="assets/logo.png"
+          alt="Logo AgendaPro"
+        >
       </div>
 
       <h2>
@@ -67,6 +70,8 @@
 
     </div>
 
+    <!-- SERVIÇOS -->
+
     <div class="servicos-section">
 
       <h2>
@@ -103,11 +108,28 @@
             R$ {{ item.preco }}
           </strong>
 
+          <div class="servico-info">
+
+            <small>
+              {{ item.horaInicio }}
+              -
+              {{ item.horaFim }}
+            </small>
+
+            <small>
+              Intervalo:
+              {{ item.intervaloMinutos }} min
+            </small>
+
+          </div>
+
         </div>
 
       </div>
 
     </div>
+
+    <!-- FORMULÁRIO -->
 
     <div
       class="form-card"
@@ -120,6 +142,8 @@
 
       <div class="form-grid">
 
+        <!-- DATA -->
+
         <div class="field">
 
           <label>
@@ -129,9 +153,12 @@
           <input
             type="date"
             [(ngModel)]="dataSelecionada"
+            (change)="buscarHorarios()"
           />
 
         </div>
+
+        <!-- CLIENTE -->
 
         <div
           class="field"
@@ -165,6 +192,8 @@
 
       </div>
 
+      <!-- HORÁRIOS -->
+
       <div class="horarios-section">
 
         <h3>
@@ -174,19 +203,39 @@
         <div class="horarios-grid">
 
           <button
-            *ngFor="let horario of horarios"
-            class="horario"
-            [class.selected]="horarioSelecionado?.id === horario.id"
+
+            *ngFor="let horario of horariosDisponiveis"
+
+            class="horario-btn"
+
+            [class.ocupado]="!horario.disponivel"
+
+            [class.selecionado]="
+              horarioSelecionado?.hora === horario.hora
+            "
+
+            [disabled]="!horario.disponivel"
+
             (click)="selecionarHorario(horario)"
           >
 
             {{ horario.hora }}
+
+            <span *ngIf="horario.disponivel">
+              ✅
+            </span>
+
+            <span *ngIf="!horario.disponivel">
+              ❌
+            </span>
 
           </button>
 
         </div>
 
       </div>
+
+      <!-- PAGAMENTO -->
 
       <div class="pagamento-section">
 
@@ -210,25 +259,33 @@
 
       </div>
 
+      <!-- BOTÕES -->
+
       <div class="buttons">
 
         <button
           class="save-button"
           (click)="salvar()"
         >
+
           Confirmar agendamento
+
         </button>
 
         <button
           class="pay-button"
           (click)="pagar()"
         >
+
           Confirmar pagamento
+
         </button>
 
       </div>
 
     </div>
+
+    <!-- LISTA DE AGENDAMENTOS -->
 
     <div class="agendamentos-grid">
 
@@ -300,7 +357,9 @@
           class="cancel-button"
           (click)="cancelar(item.id)"
         >
+
           Cancelar reserva
+
         </button>
 
       </div>
