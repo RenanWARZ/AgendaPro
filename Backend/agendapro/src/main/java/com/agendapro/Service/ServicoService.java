@@ -14,6 +14,8 @@ public class ServicoService {
 
     private final ServicoRepository repository;
 
+    // SALVAR
+
     public Servico salvar(
             Servico servico
     ) {
@@ -23,19 +25,25 @@ public class ServicoService {
         );
     }
 
+    // LISTAR TODOS
+
     public List<Servico> listarTodos() {
 
         return repository.findAll();
     }
 
-    public List<Servico> listar(Long profissionalId
+    // LISTAR POR PROFISSIONAL
+
+    public List<Servico> listar(
+            Long profissionalId
     ) {
 
-        return repository
-                .findByProfissionalId(
-                        profissionalId
-                );
+        return repository.findByProfissionalId(
+                profissionalId
+        );
     }
+
+    // EDITAR
 
     public Servico editar(
             Long id,
@@ -43,13 +51,17 @@ public class ServicoService {
     ) {
 
         Servico servicoExistente =
+
                 repository.findById(id)
 
                         .orElseThrow(() ->
+
                                 new RuntimeException(
                                         "Serviço não encontrado"
                                 )
                         );
+
+        // DADOS BÁSICOS
 
         servicoExistente.setFoto(
                 servico.getFoto()
@@ -73,6 +85,20 @@ public class ServicoService {
 
         servicoExistente.setDuracaoMinutos(
                 servico.getDuracaoMinutos()
+        );
+
+        // FUNCIONAMENTO
+
+        servicoExistente.setDiasFuncionamento(
+                servico.getDiasFuncionamento()
+        );
+
+        servicoExistente.setHoraInicio(
+                servico.getHoraInicio()
+        );
+
+        servicoExistente.setHoraFim(
+                servico.getHoraFim()
         );
 
         return repository.save(

@@ -58,6 +58,6 @@ public class UsuarioService {
     }
 
     public List<Usuario> listar() {
-        return repository.findAll();
+        return repository.findByRole(Role.ADMIN);
     }
 }

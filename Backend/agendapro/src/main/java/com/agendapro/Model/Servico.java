@@ -3,6 +3,8 @@ package com.agendapro.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "servicos")
 @Getter
@@ -25,6 +27,13 @@ public class Servico {
 
     @Column(length = 800)
     private String foto;
+
+    @ElementCollection
+    private List<String> diasFuncionamento;
+
+    private String horaInicio;
+    private String horaFim;
+    private Integer intervaloMinutos;
 
     @ManyToOne
     @JoinColumn(name = "profissional_id")
