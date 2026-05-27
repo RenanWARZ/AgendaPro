@@ -1,5 +1,3 @@
-/* clientes.component.css */
-
 * {
   margin: 0;
   padding: 0;
@@ -11,53 +9,49 @@ body {
   background: #f5f5f2;
 }
 
-/* PAGE */
-
 .page {
   width: 100%;
   min-height: 100vh;
   display: flex;
 }
 
-/* SIDEBAR */
-
 .sidebar {
-  width: 280px;
-
-  background: linear-gradient(180deg,
-      #012c25,
-      #001b16);
-
   color: white;
-
-  padding: 40px 30px;
+  width: 280px;
+  min-height: 100vh;
+  background: linear-gradient(285deg, #2800a1, #0e0035);
+  padding: 35px 30px;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
-
   margin-bottom: 60px;
 }
 
 .logo-icon {
-  width: 45px;
-  height: 45px;
-
-  border-radius: 50%;
-  background: #f7b34d;
-
+  width: 100px;
+  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.logo-icon img {
+  width: 120%;
+  height: 120%;
+  object-fit: contain;
+  padding-left: 10px;
 }
 
 .logo h2 {
   font-size: 28px;
 }
-
-/* NAV */
 
 nav {
   display: flex;
@@ -67,13 +61,9 @@ nav {
 
 nav a {
   padding: 16px 20px;
-
   border-radius: 14px;
-
   color: rgba(255, 255, 255, 0.8);
-
   text-decoration: none;
-
   transition: 0.3s;
 }
 
@@ -85,8 +75,6 @@ nav .active {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
-
-/* CONTENT */
 
 .content {
   flex: 1;
@@ -107,56 +95,46 @@ nav .active {
   color: #6b7280;
 }
 
-/* GRID */
-
 .clientes-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(320px, 1fr));
-
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+  align-items: start;
 }
-
-/* CARD */
 
 .cliente-card {
   background: white;
-
-  padding: 28px;
-
-  border-radius: 28px;
-
-  box-shadow:
-    0 15px 35px rgba(0, 0, 0, 0.05);
-
+  padding: 20px;
+  border-radius: 24px;
+  border: 2px solid transparent;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100%;
 }
 
 .cliente-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  border-color: #6d3bff;
+  box-shadow: 0 20px 40px rgba(109, 59, 255, 0.15), 0 0 0 4px rgba(109, 59, 255, 0.08);
 }
 
 .cliente-header {
   display: flex;
   align-items: center;
   gap: 15px;
-
   margin-bottom: 25px;
 }
 
-.avatar {
+.avatar img {
   width: 55px;
   height: 55px;
-
   border-radius: 16px;
-
-  background: rgba(0, 86, 63, 0.08);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 26px;
 }
 
@@ -173,10 +151,136 @@ nav .active {
 .info strong {
   display: block;
   margin-bottom: 5px;
-
   color: #10231d;
 }
 
 .info p {
   color: #6b7280;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #800000;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: 0.3s;
+}
+
+.logout-button:hover {
+  background: #440000;
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+@media (max-width: 1100px) {
+  .content {
+    padding: 25px;
+  }
+
+  .clientes-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .logo {
+    margin-bottom: 30px;
+  }
+
+  nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  nav a {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .topbar {
+    margin-bottom: 30px;
+  }
+
+  .topbar h1 {
+    font-size: 30px;
+  }
+
+  .clientes-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cliente-card {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .cliente-header {
+    align-items: flex-start;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  .content {
+    padding: 15px;
+  }
+
+  .topbar h1 {
+    font-size: 24px;
+  }
+
+  .topbar p {
+    font-size: 14px;
+  }
+
+  .cliente-card {
+    padding: 18px;
+  }
+
+  .cliente-header {
+    gap: 12px;
+  }
+
+  .cliente-header h3 {
+    font-size: 18px;
+  }
+
+  .cliente-header span,
+  .info p {
+    font-size: 13px;
+  }
+
+  .logout-button {
+    padding: 12px;
+  }
 }

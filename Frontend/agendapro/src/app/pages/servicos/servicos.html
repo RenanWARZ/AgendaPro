@@ -1,20 +1,23 @@
 <div class="page" *ngIf="role === 'ADMIN'">
   <aside class="sidebar">
     <div class="logo">
-      <div class="logo-icon">📅</div>
+      <div class="logo-icon">
+        <img src="assets/logo.png" alt="Logo AgendaPro" />
+      </div>
 
       <h2>AgendaPro</h2>
     </div>
 
     <nav>
-      <a routerLink="/agendamentos"> Agendamentos </a>
-
+      <a *ngIf="role === 'ADMIN'" routerLink="/agendamentos"> Agendamentos </a>
       <a class="active"> Serviços </a>
 
-      <a routerLink="/clientes"> Clientes </a>
+      <a *ngIf="role === 'ADMIN'" routerLink="/clientes"> Clientes </a>
 
       <a> Configurações </a>
     </nav>
+
+    <button class="logout-button" (click)="sair()">Sair</button>
   </aside>
 
   <main class="content">
@@ -65,7 +68,7 @@
 
         <input type="time" [(ngModel)]="servico.horaFim" />
 
-        <input type="number" placeholder="Intervalo" [(ngModel)]="servico.intervaloMinutos" />
+        <!-- <input type="number" placeholder="Intervalo"  default="30" [(ngModel)]="servico.intervaloMinutos" /> -->
       </div>
 
       <button class="save-button" (click)="salvar()">
@@ -87,39 +90,28 @@
               {{ item.descricao }}
             </h4>
 
-            <p>
-              {{ item.endereco }}
-            </p>
+            <p> <a class="link" [href]="'https://www.google.com/maps/search/?api=1&query=' + item.endereco" target="_blank"> {{ item.endereco }} </a> </p>
+
+            <span> Horário de funcionamento: <strong>{{ item.horaInicio }} - {{ item.horaFim }} </strong></span>
+
+            <br />
 
             <span>
-              {{ item.duracaoMinutos }}
+              Duração: <strong>{{ item.duracaoMinutos }}</strong>
 
               minutos
             </span>
 
-            <br />
-
-            <span>
-              {{ item.horaInicio }}
-
-              -
-
-              {{ item.horaFim }}
-            </span>
-
-            <br />
-
-            <span>
+            <!-- <span>
               Intervalo:
               {{ item.intervaloMinutos }}
               min
-            </span>
-
-            <!-- DIAS -->
+            </span> -->
 
             <div class="dias-tags">
+             <span class="title"> Dias de funcionamento: </span>
               <span class="dia-tag" *ngFor="let dia of item.diasFuncionamento">
-                {{ traduzirDia(dia) }}
+               {{ traduzirDia(dia) }}
               </span>
             </div>
           </div>
