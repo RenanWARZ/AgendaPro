@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
@@ -12,9 +12,13 @@ import { ServicoService } from '../../../service/servico.service';
 
 @Component({
   selector: 'app-servicos',
+
   standalone: true,
+
   imports: [FormsModule, CommonModule, RouterLink],
+
   templateUrl: './servicos.html',
+
   styleUrl: './servicos.css',
 })
 export class Servicos implements OnInit {
@@ -25,6 +29,10 @@ export class Servicos implements OnInit {
   editando = false;
 
   servicoEditandoId = 0;
+
+  mostrarFormularioServico = false;
+
+  diasSemana = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   servico = {
     nome: '',
@@ -39,6 +47,14 @@ export class Servicos implements OnInit {
 
     duracaoMinutos: '',
 
+    diasFuncionamento: [] as string[],
+
+    horaInicio: '',
+
+    horaFim: '',
+
+    intervaloMinutos: 30,
+
     profissional: {
       id: 0,
     },
@@ -47,24 +63,61 @@ export class Servicos implements OnInit {
   constructor(
     private service: ServicoService,
     private router: Router,
+    private cd: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.role = localStorage.getItem('role') || '';
-    }
 
-    this.listarServicos();
+      this.listarServicos();
+    }
+  }
+
+  abrirServicos() {
+    this.mostrarFormularioServico = !this.mostrarFormularioServico;
+  }
+
+  traduzirDia(dia: string): string {
+    const dias: any = {
+      MONDAY: 'Segunda',
+      TUESDAY: 'Terça',
+      WEDNESDAY: 'Quarta',
+      THURSDAY: 'Quinta',
+      FRIDAY: 'Sexta',
+      SATURDAY: 'Sábado',
+      SUNDAY: 'Domingo',
+    };
+
+    return dias[dia] || dia;
+  }
+
+  toggleDia(dia: string) {
+    const index = this.servico.diasFuncionamento.indexOf(dia);
+
+    if (index > -1) {
+      this.servico.diasFuncionamento.splice(index, 1);
+    } else {
+      this.servico.diasFuncionamento.push(dia);
+    }
   }
 
   listarServicos() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const usuarioId = localStorage.getItem('usuarioId');
+
+    if (!usuarioId) {
+      return;
+    }
 
     this.service.listarServico(usuarioId).subscribe((res: any) => {
       this.servicos = res;
+      
     });
   }
-
 
   salvar() {
     const usuarioId = localStorage.getItem('usuarioId');
@@ -87,6 +140,8 @@ export class Servicos implements OnInit {
             icon: 'success',
             title: 'Serviço atualizado',
           });
+
+          this.mostrarFormularioServico = false;
 
           this.resetarFormulario();
 
@@ -111,6 +166,8 @@ export class Servicos implements OnInit {
           icon: 'success',
           title: 'Serviço criado',
         });
+
+        this.mostrarFormularioServico = false;
 
         this.resetarFormulario();
 
@@ -145,10 +202,20 @@ export class Servicos implements OnInit {
 
       duracaoMinutos: item.duracaoMinutos,
 
+      diasFuncionamento: item.diasFuncionamento || [],
+
+      horaInicio: item.horaInicio,
+
+      horaFim: item.horaFim,
+
+      intervaloMinutos: item.intervaloMinutos,
+
       profissional: {
         id: item.profissional?.id || 0,
       },
     };
+
+    this.mostrarFormularioServico = true;
   }
 
   excluir(id: number) {
@@ -206,6 +273,14 @@ export class Servicos implements OnInit {
 
       duracaoMinutos: '',
 
+      diasFuncionamento: [],
+
+      horaInicio: '',
+
+      horaFim: '',
+
+      intervaloMinutos: 30,
+
       profissional: {
         id: 0,
       },
@@ -214,7 +289,6 @@ export class Servicos implements OnInit {
 
   sair() {
     localStorage.clear();
-
     this.router.navigate(['/login']);
   }
 

@@ -247,3 +247,51 @@ nav .active {
   cursor: pointer;
   transition: 0.3s;
 }
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.days-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.day-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f5f5f5;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.day-item input {
+  cursor: pointer;
+}
+
+.dias-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dia-tag {
+  background: #e8f0ff;
+  color: #2b5cff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
