@@ -25,23 +25,47 @@
         <p>Gerencie seus serviços e horários.</p>
       </div>
 
-      <button class="new-button">+ Novo serviço</button>
+      <button class="new-button" (click)="abrirServicos()">
+        {{ mostrarFormularioServico ? 'Fechar' : '+ Novo serviço' }}
+      </button>
     </div>
 
-    <div class="form-card">
-      <h2>Criar serviço</h2>
+    <!-- FORM -->
+
+    <div class="form-card" *ngIf="mostrarFormularioServico">
+      <h2>
+        {{ editando ? 'Editar serviço' : 'Criar serviço' }}
+      </h2>
 
       <div class="form-grid">
         <input type="text" placeholder="Nome do serviço" [(ngModel)]="servico.nome" />
-        <input type="text" placeholder="Descrição do serviço" [(ngModel)]="servico.descricao" />
+        <input type="text" placeholder="Descrição" [(ngModel)]="servico.descricao" />
         <input type="text" placeholder="Endereço" [(ngModel)]="servico.endereco" />
-        <input type="text" placeholder="URL da foto" [(ngModel)]="servico.foto" />
+        <input type="text" placeholder="Foto URL" [(ngModel)]="servico.foto" />
         <input type="number" placeholder="Preço" [(ngModel)]="servico.preco" />
-        <input
-          type="number"
-          placeholder="Duração em minutos"
-          [(ngModel)]="servico.duracaoMinutos"
-        />
+        <input type="number" placeholder="Duração" [(ngModel)]="servico.duracaoMinutos" />
+
+        <div class="full-width">
+          <label class="label"> Dias de funcionamento </label>
+
+          <div class="days-grid">
+            <label class="day-item" *ngFor="let dia of diasSemana">
+              <input
+                type="checkbox"
+                (change)="toggleDia(dia)"
+                [checked]="servico.diasFuncionamento.includes(dia)"
+              />
+
+              {{ traduzirDia(dia) }}
+            </label>
+          </div>
+        </div>
+
+        <input type="time" [(ngModel)]="servico.horaInicio" />
+
+        <input type="time" [(ngModel)]="servico.horaFim" />
+
+        <input type="number" placeholder="Intervalo" [(ngModel)]="servico.intervaloMinutos" />
       </div>
 
       <button class="save-button" (click)="salvar()">
@@ -52,16 +76,52 @@
     <div class="services-grid">
       <div class="service-card" *ngFor="let item of servicos">
         <div class="service-header">
-          <div class="service-icon"><i class="bi bi-award-fill"></i></div>
+          <img [src]="item.foto" class="service-image" />
 
           <div>
-            <img [src]="item.foto" class="service-image" alt="Foto" />
-            <h3>{{ item.nome }}</h3>
-            <h4>{{ item.descricao }}</h4>
-            <a [href]="'https://www.google.com/maps/search/?api=1&query=' + item.endereco" target="_blank" class="address-link">
-              <i class="bi bi-geo-alt"></i> {{ item.endereco }}
-            </a><br>
-            <span>{{ item.duracaoMinutos }} minutos</span>
+            <h3>
+              {{ item.nome }}
+            </h3>
+
+            <h4>
+              {{ item.descricao }}
+            </h4>
+
+            <p>
+              {{ item.endereco }}
+            </p>
+
+            <span>
+              {{ item.duracaoMinutos }}
+
+              minutos
+            </span>
+
+            <br />
+
+            <span>
+              {{ item.horaInicio }}
+
+              -
+
+              {{ item.horaFim }}
+            </span>
+
+            <br />
+
+            <span>
+              Intervalo:
+              {{ item.intervaloMinutos }}
+              min
+            </span>
+
+            <!-- DIAS -->
+
+            <div class="dias-tags">
+              <span class="dia-tag" *ngFor="let dia of item.diasFuncionamento">
+                {{ traduzirDia(dia) }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -72,10 +132,7 @@
 
           <button class="delete-button" (click)="excluir(item.id)">Excluir</button>
         </div>
-
-        <!-- <button class="details-button">Ver detalhes</button> -->
       </div>
     </div>
   </main>
 </div>
-
