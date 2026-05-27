@@ -1,11 +1,13 @@
 package com.agendapro.Controller;
 
+import com.agendapro.DTO.HorarioDTO;
 import com.agendapro.Model.Agendamento;
 import com.agendapro.Service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -40,4 +42,20 @@ public class AgendamentoController {
 
         return ResponseEntity.ok(service.listar(id));
     }
-}
+
+        @GetMapping("/horarios")
+        public ResponseEntity<List<HorarioDTO>> listarHorarios(
+                @RequestParam Long servicoId,
+                @RequestParam String data
+        ) {
+
+            return ResponseEntity.ok(
+
+                    service.listarHorarios(
+                            servicoId,
+                            LocalDate.parse(data)
+                    )
+
+            );
+        }
+    }

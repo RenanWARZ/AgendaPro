@@ -1,11 +1,13 @@
 package com.agendapro.Controller;
 
+import com.agendapro.DTO.HorarioDTO;
 import com.agendapro.Model.Servico;
 import com.agendapro.Service.ServicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,9 +35,8 @@ public class ServicoController {
 
     @GetMapping("/profissional/{id}")
     public ResponseEntity<List<Servico>> listar(@PathVariable Long id) {
-        return ResponseEntity.ok(service.listarTodos());
+        return ResponseEntity.ok(service.listar(id));
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Servico> editar(@PathVariable Long id,@RequestBody Servico servico) {
