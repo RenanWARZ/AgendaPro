@@ -1,80 +1,79 @@
 <div class="page">
   <aside class="sidebar">
-
     <div class="logo">
       <div class="logo-icon">
-        📅
+        <img src="assets/logo.png" alt="Logo AgendaPro" />
       </div>
-      <h2>
-        AgendaPro
-      </h2>
+      <h2>AgendaPro</h2>
     </div>
+
     <nav>
-
-      <a routerLink="/agendamentos">
-        Agendamentos
-      </a>
-
-      <a routerLink="/servicos">
-        Serviços
-      </a>
-
-      <a class="active">
-        Clientes
-      </a>
-
-      <a routerLink="/">
-        Configurações
-      </a>
-
+      <a *ngIf="role === 'ADMIN'" routerLink="/agendamentos"> Agendamentos </a>
+      <a *ngIf="role === 'ADMIN'" routerLink="/servicos"> Serviços </a>
+      <a class="active"> Clientes </a>
     </nav>
+
+    <button class="logout-button" (click)="sair()">Sair</button>
   </aside>
 
   <main class="content">
     <div class="topbar">
       <div>
-        <h1>
-          Clientes
-        </h1>
-        <p>
-          Clientes cadastrados no sistema.
-        </p>
+        <h1>Clientes Agendados</h1>
+        <p>Veja quem agendou seus serviços.</p>
       </div>
     </div>
 
+    <div class="filtro-section">
+      <label>Filtrar por serviço</label>
+      <select [(ngModel)]="servicoSelecionadoId" (change)="listar()">
+        <option *ngFor="let s of servicos" [ngValue]="s.id">
+          {{ s.nome }}
+        </option>
+      </select>
+    </div>
 
     <div class="clientes-grid">
-      <div class="cliente-card" *ngFor="let item of clientes">
+
+      <div class="cliente-card" *ngFor="let item of agendamentos">
         <div class="cliente-header">
           <div class="avatar">
-            👤
+            <img src="assets/perfil.png" alt="" />
           </div>
           <div>
-
-            <h3>
-              {{ item.nome }}
-            </h3>
-
-            <span>
-              {{ item.role }} - {{item.tipoPessoa}}
-            </span>
+            <h3>{{ item.cliente?.nome }}</h3>
+            <span>{{ item.servico?.nome }}</span>
           </div>
         </div>
 
         <div class="cliente-body">
+
           <div class="info">
-
-            <strong>
-              E-mail
-            </strong>
-
-            <p>
-              {{ item.email }}
-            </p>
-
+            <strong>E-mail</strong>
+            <p>{{ item.cliente?.email }}</p>
           </div>
+
+          <div class="info">
+            <strong>Horário</strong>
+            <p>{{ item.inicio | date: 'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+
+          <div class="info">
+            <strong>Status</strong>
+            <p [class.cancelado]="item.status === 'CANCELADO'"
+               [class.agendado]="item.status === 'AGENDADO'">
+              {{ item.status }}
+            </p>
+          </div>
+
         </div>
       </div>
+
+      <!-- VAZIO -->
+      <p *ngIf="agendamentos.length === 0" class="vazio">
+        Nenhum cliente agendado para este serviço.
+      </p>
+
     </div>
   </main>
 </div>

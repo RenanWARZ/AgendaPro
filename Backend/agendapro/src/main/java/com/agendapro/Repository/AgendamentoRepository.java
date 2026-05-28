@@ -21,4 +21,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
             LocalDateTime inicio,
             LocalDateTime fim
     );
+
+    List<Agendamento> findByServicoId(Long servicoId);
 }

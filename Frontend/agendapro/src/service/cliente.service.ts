@@ -9,7 +9,11 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
-  listar() {
-    return this.http.get(`${this.api}/usuarios`);
+  listarPorServico(servicoId: number) {
+    return this.http.get(`${this.api}/agendamentos/servico/${servicoId}`);
+  }
+
+  listarServicos(profissionalId: number) {
+    return this.http.get(`${this.api}/servicos/profissional/${profissionalId}`);
   }
 }

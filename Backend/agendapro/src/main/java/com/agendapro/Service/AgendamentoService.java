@@ -1,6 +1,7 @@
 package com.agendapro.Service;
 
 import com.agendapro.DTO.HorarioDTO;
+import com.agendapro.Enum.StatusAgendamento;
 import com.agendapro.Model.Agendamento;
 import com.agendapro.Model.Servico;
 import com.agendapro.Model.Usuario;
@@ -9,10 +10,9 @@ import com.agendapro.Repository.ServicoRepository;
 import com.agendapro.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class AgendamentoService {
 
         agendamento.setServico(servico);
         agendamento.setFim(fim);
-        agendamento.setStatus("AGENDADO");
+        agendamento.setStatus(StatusAgendamento.AGENDADO);
 
         return repository.save(
                 agendamento
@@ -54,7 +54,7 @@ public class AgendamentoService {
         Agendamento agendamento =repository.findById(id)
                 .orElseThrow(()->new RuntimeException("Agendamento não encontrado"));
 
-        agendamento.setStatus("CANCELADO");
+        agendamento.setStatus(StatusAgendamento.CANCELADO);
 
         repository.save(agendamento);
     }
@@ -77,13 +77,11 @@ public class AgendamentoService {
 
         Servico servico = servicoRepository.findById(servicoId).orElseThrow();
 
-        DayOfWeek diaSemana = data.getDayOfWeek();
-
-        String dia = diaSemana.name();
-
-        if (!servico.getDiasFuncionamento().contains(dia)) {
-            return new ArrayList<>();
-        }
+        //    DayOfWeek diaSemana = data.getDayOfWeek();
+        //   String dia = diaSemana.name();
+        //   if (!servico.getDiasFuncionamento().contains(dia)) {
+        // return new ArrayList<>();
+     //   }
 
         LocalTime inicio = LocalTime.parse(servico.getHoraInicio());
         LocalTime fim = LocalTime.parse(servico.getHoraFim());
@@ -126,5 +124,35 @@ public class AgendamentoService {
         }
 
         return horarios;
+    }
+
+    public Agendamento editar(Long id, LocalDateTime novoInicio) {
+
+        Agendamento agendamento = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        if (agendamento.getStatus() == StatusAgendamento.CANCELADO){
+            throw new RuntimeException("Não é possível editar um agendamento cancelado");
+        }
+
+        Servico servico = agendamento.getServico();
+        LocalDateTime novoFim = novoInicio.plusMinutes(servico.getDuracaoMinutos());
+
+        boolean conflito = repository.existsByEmpresaAndInicioLessThanAndFimGreaterThan(
+                agendamento.getEmpresa(), novoFim, novoInicio
+        );
+
+        if (conflito) {
+            throw new RuntimeException("Horário indisponível");
+        }
+
+        agendamento.setInicio(novoInicio);
+        agendamento.setFim(novoFim);
+
+        return repository.save(agendamento);
+    }
+
+    public List<Agendamento> listarPorServico(Long servicoId) {
+        return repository.findByServicoId(servicoId);
     }
 }
