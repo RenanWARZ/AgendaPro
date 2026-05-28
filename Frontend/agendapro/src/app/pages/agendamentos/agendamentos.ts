@@ -13,7 +13,6 @@ import { AgendamentoService } from '../../../service/agendamento.service';
   templateUrl: './agendamentos.html',
   styleUrl: './agendamentos.css',
 })
-
 export class Agendamentos implements OnInit {
   role = '';
 
@@ -44,9 +43,14 @@ export class Agendamentos implements OnInit {
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.role = localStorage.getItem('role') || '';
+
+      Promise.resolve().then(() => {
+        this.listarAgendamentos();
+        this.listarServicos();
+
+        this.cd.detectChanges();
+      });
     }
-    this.listarAgendamentos();
-    this.listarServicos();
   }
 
   listarAgendamentos() {
@@ -73,13 +77,26 @@ export class Agendamentos implements OnInit {
   }
 
   buscarHorarios() {
-    if (!this.dataSelecionada || this.agendamento.servico.id === 0) return;
+    console.log('DATA:', this.dataSelecionada);
+    console.log('SERVICO:', this.agendamento.servico.id);
+
+    if (!this.dataSelecionada || this.agendamento.servico.id === 0) {
+      console.log('BLOQUEOU');
+      return;
+    }
 
     this.agendamentoService
       .listarHorarios(this.agendamento.servico.id, this.dataSelecionada)
-      .subscribe((res: any) => {
-        this.horariosDisponiveis = res;
-        this.cd.detectChanges();
+      .subscribe({
+        next: (res: any) => {
+          console.log('HORARIOS BACKEND:', res);
+
+          this.horariosDisponiveis = res;
+        },
+
+        error: (err) => {
+          console.error('ERRO HORARIOS:', err);
+        },
       });
   }
 

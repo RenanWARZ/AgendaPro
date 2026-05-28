@@ -1,10 +1,7 @@
-/* cadastro.component.css */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -12,42 +9,30 @@ body {
   background: #f5f5f2;
 }
 
-/* PAGE */
-
 .page {
   width: 100%;
   min-height: 100vh;
-
   display: flex;
 }
 
-/* LEFT */
-
 .left-side {
   width: 50%;
-
   background:
     linear-gradient(rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.7)),
-
     linear-gradient(180deg,
       #012c25,
       #001b16);
-
   position: relative;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 60px;
-
   color: white;
 }
 
 .left-content {
   max-width: 520px;
-
   z-index: 2;
 }
 
@@ -55,18 +40,14 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-
   margin-bottom: 40px;
 }
 
 .logo-icon {
   width: 50px;
   height: 50px;
-
   border-radius: 50%;
-
   background: #f7b34d;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,21 +59,15 @@ body {
 
 .badge {
   display: inline-block;
-
   padding: 12px 18px;
-
   border-radius: 999px;
-
   background: rgba(255, 255, 255, 0.08);
-
   margin-bottom: 30px;
 }
 
 .left-content h1 {
   font-size: 64px;
-
   line-height: 1.1;
-
   margin-bottom: 25px;
 }
 
@@ -102,99 +77,69 @@ body {
 
 .left-content p {
   font-size: 22px;
-
   line-height: 1.6;
-
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* RIGHT */
 
 .right-side {
   width: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 40px;
 }
 
-/* CARD */
 
 .card {
   width: 100%;
   max-width: 520px;
-
   background: white;
-
   padding: 45px;
-
   border-radius: 32px;
-
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.08);
 }
 
 .card h1 {
   font-size: 54px;
-
   color: #10231d;
-
   margin-bottom: 10px;
 }
 
 .subtitle {
   color: #6b7280;
-
   margin-bottom: 30px;
 }
 
-/* SWITCH */
-
 .switch {
   width: 100%;
-
   background: #ecebe5;
-
   border-radius: 999px;
-
   padding: 6px;
-
   display: flex;
-
   margin-bottom: 35px;
 }
 
 .switch button {
   flex: 1;
-
   border: none;
-
   padding: 14px;
-
   border-radius: 999px;
-
   background: transparent;
-
   cursor: pointer;
-
   font-size: 15px;
 }
 
 .switch .active {
   background: white;
-
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* FORM */
-
 .form {
   display: flex;
   flex-direction: column;
-
   gap: 22px;
 }
 
@@ -205,32 +150,24 @@ body {
 
 .field label {
   margin-bottom: 10px;
-
   color: #10231d;
-
   font-weight: bold;
 }
 
 .field input,
 .field select {
   width: 100%;
-
   padding: 18px;
-
   border-radius: 18px;
-
   border: 1px solid #e5e7eb;
-
   outline: none;
-
   font-size: 15px;
-
   transition: 0.3s;
 }
 
 .field input:focus,
 .field select:focus {
-  border-color: #00563f;
+  border-color: #3200c7;
 }
 
 .submit-button {
@@ -238,7 +175,7 @@ body {
   padding: 18px;
   border: none;
   border-radius: 18px;
-  background: #00563f;
+  background: #16005f;
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -248,5 +185,5 @@ body {
 }
 
 .submit-button:hover {
-  background: #014737;
+  background: #16005f;
 }

@@ -77,13 +77,11 @@ public class AgendamentoService {
 
         Servico servico = servicoRepository.findById(servicoId).orElseThrow();
 
-        DayOfWeek diaSemana = data.getDayOfWeek();
-
-        String dia = diaSemana.name();
-
-        if (!servico.getDiasFuncionamento().contains(dia)) {
-            return new ArrayList<>();
-        }
+        //    DayOfWeek diaSemana = data.getDayOfWeek();
+        //   String dia = diaSemana.name();
+        //   if (!servico.getDiasFuncionamento().contains(dia)) {
+        // return new ArrayList<>();
+     //   }
 
         LocalTime inicio = LocalTime.parse(servico.getHoraInicio());
         LocalTime fim = LocalTime.parse(servico.getHoraFim());

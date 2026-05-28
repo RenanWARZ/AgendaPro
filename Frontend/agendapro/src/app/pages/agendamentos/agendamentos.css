@@ -19,7 +19,7 @@ body {
   color: white;
   width: 280px;
   min-height: 100vh;
-  background: linear-gradient(285deg, #2800a1, #0e0035);
+  background-image: url("/assets/roxo.jpeg");
   padding: 35px 30px;
   display: flex;
   flex-direction: column;
@@ -112,7 +112,7 @@ nav .active {
   padding: 14px;
   border: none;
   border-radius: 14px;
-  background: #800000;
+  background: #dc2626;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -567,6 +567,16 @@ nav .active {
   color: #15803d;
   font-size: 13px;
   font-weight: bold;
+}
+
+.status.agendado {
+  color: white !important;
+  background-color: #22c55e;
+}
+
+.status.cancelado {
+  color: white !important;
+  background-color: #ef4444;
 }
 
 .card-body {
