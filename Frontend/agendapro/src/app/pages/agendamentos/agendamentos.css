@@ -129,6 +129,61 @@ nav .active {
   padding: 40px;
 }
 
+.agendamentos-section h2 {
+  margin: 2rem 0 1rem;
+}
+
+.edicao-form {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.edicao-form h4 {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.edicao-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.edit-button {
+  background: #3182ce;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancelado {
+  color: #e53e3e;
+  font-weight: bold;
+}
+
+.agendado {
+  color: #38a169;
+  font-weight: bold;
+}
+
+.vazio {
+  color: #888;
+  text-align: center;
+  margin-top: 2rem;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -345,13 +400,9 @@ nav .active {
     0 0 0 5px rgba(109, 59, 255, 0.12);
 }
 
-/* ÍCONE */
-
 .horario-btn.selecionado span {
   animation: pulse 1s infinite;
 }
-
-/* OCUPADO */
 
 .horario-btn.ocupado {
   background: #f3f4f6;
@@ -366,8 +417,6 @@ nav .active {
 
   box-shadow: none;
 }
-
-/* ANIMAÇÃO */
 
 @keyframes pulse {
   0% {

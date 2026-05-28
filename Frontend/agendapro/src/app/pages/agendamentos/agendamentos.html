@@ -4,18 +4,13 @@
       <div class="logo-icon">
         <img src="assets/logo.png" alt="Logo AgendaPro" />
       </div>
-
       <h2>AgendaPro</h2>
     </div>
 
     <nav>
       <a class="active"> Agendamentos </a>
-
       <a *ngIf="role === 'ADMIN'" routerLink="/servicos"> Serviços </a>
-
       <a *ngIf="role === 'ADMIN'" routerLink="/clientes"> Clientes </a>
-
-      <a> Configurações </a>
     </nav>
 
     <button class="logout-button" (click)="sair()">Sair</button>
@@ -25,14 +20,11 @@
     <div class="topbar">
       <div>
         <h1>Agendamentos</h1>
-
         <p>Escolha um serviço e agende seu horário.</p>
       </div>
     </div>
 
-    <!-- SERVIÇOS -->
-
-    <div class="servicos-section">
+    <div class="servicos-section" *ngIf="role === 'USUARIO'">
       <h2>Escolha um serviço</h2>
 
       <div class="servicos-grid">
@@ -43,61 +35,29 @@
           (click)="selecionarServico(item)"
         >
           <img [src]="item.foto" alt="Foto serviço" />
-
-          <h3>
-            {{ item.nome }}
-          </h3>
-
-          <p>
-            {{ item.descricao }}
-          </p>
-
-          <span> {{ item.duracaoMinutos }} minutos </span>
-
-          <strong> R$ {{ item.preco }} </strong>
-
+          <h3>{{ item.nome }}</h3>
+          <p>{{ item.descricao }}</p>
+          <span>{{ item.duracaoMinutos }} minutos</span>
+          <strong>R$ {{ item.preco }}</strong>
           <div class="servico-info">
-            <small>
-              {{ item.horaInicio }}
-              -
-              {{ item.horaFim }}
-            </small>
-
-            <small>
-              Intervalo:
-              {{ item.intervaloMinutos }} min
-            </small>
+            <small>{{ item.horaInicio }} - {{ item.horaFim }}</small>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="form-card" *ngIf="agendamento.servico.id !== 0">
+    <div class="form-card" *ngIf="role === 'USUARIO' && agendamento.servico.id !== 0">
       <h2>Finalizar agendamento</h2>
 
       <div class="form-grid">
         <div class="field">
-          <label> Data </label>
-
+          <label>Data</label>
           <input type="date" [(ngModel)]="dataSelecionada" (change)="buscarHorarios()" />
-        </div>
-
-        <div class="field" *ngIf="role === 'ADMIN'">
-          <label> Cliente </label>
-
-          <select [(ngModel)]="agendamento.cliente.id">
-            <option [ngValue]="0">Selecione um cliente</option>
-
-            <option *ngFor="let item of clientes" [ngValue]="item.id">
-              {{ item.nome }}
-            </option>
-          </select>
         </div>
       </div>
 
       <div class="horarios-section">
         <h3>Escolha um horário</h3>
-
         <div class="horarios-grid">
           <button
             *ngFor="let horario of horariosDisponiveis"
@@ -108,80 +68,88 @@
             (click)="selecionarHorario(horario)"
           >
             {{ horario.hora }}
-
-            <span *ngIf="horario.disponivel"> ✅ </span>
-
-            <span *ngIf="!horario.disponivel"> ❌ </span>
+            <span *ngIf="horario.disponivel">✅</span>
+            <span *ngIf="!horario.disponivel">❌</span>
           </button>
         </div>
       </div>
 
-      <!-- PAGAMENTO -->
-
-      <div class="pagamento-section">
-        <h3>Método de pagamento</h3>
-
-        <select [(ngModel)]="pagamento.metodo">
-          <option value="PIX">PIX</option>
-
-          <option value="CARTAO">Cartão</option>
-        </select>
-      </div>
-
-      <!-- BOTÕES -->
-
       <div class="buttons">
         <button class="save-button" (click)="salvar()">Confirmar agendamento</button>
-
-        <button class="pay-button" (click)="pagar()">Confirmar pagamento</button>
       </div>
     </div>
 
-    <!-- LISTA DE AGENDAMENTOS -->
+    <div class="agendamentos-section">
+      <h2>Meus agendamentos</h2>
 
-    <div class="agendamentos-grid">
-      <div class="agendamento-card" *ngFor="let item of agendamentos">
-        <div class="card-header">
-          <div class="user-info">
-            <div class="avatar">👤</div>
-
-            <div>
-              <h3>
-                {{ item.cliente?.nome }}
-              </h3>
-
-              <span>
-                {{ item.servico?.nome }}
-              </span>
+      <div class="agendamentos-grid">
+        <div class="agendamento-card" *ngFor="let item of agendamentos">
+          <div class="card-header">
+            <div class="user-info">
+              <div class="avatar">👤</div>
+              <div>
+                <h3>{{ item.cliente?.nome }}</h3>
+                <span>{{ item.servico?.nome }}</span>
+              </div>
+            </div>
+            <div
+              class="status"
+              [class.cancelado]="item.status === 'CANCELADO'"
+              [class.agendado]="item.status === 'AGENDADO'"
+            >
+              {{ item.status }}
             </div>
           </div>
 
-          <div class="status">
-            {{ item.status }}
+          <div class="card-body">
+            <div class="info">
+              <strong>Horário</strong>
+              <p>{{ item.inicio | date: 'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+            <div class="info">
+              <strong>Profissional</strong>
+              <p>{{ item.empresa?.nome }}</p>
+            </div>
+          </div>
+
+          <div class="card-actions" *ngIf="role === 'USUARIO' && item.status !== 'CANCELADO'">
+            <button class="edit-button" (click)="abrirEdicao(item)">✏️ Editar</button>
+
+            <button class="cancel-button" (click)="cancelar(item.id)">❌ Cancelar</button>
+          </div>
+
+          <!-- FORMULÁRIO DE EDIÇÃO INLINE -->
+          <div class="edicao-form" *ngIf="editandoId === item.id">
+            <h4>Escolha nova data e horário</h4>
+
+            <div class="form-grid">
+              <div class="field">
+                <label>Nova data</label>
+                <input type="date" [(ngModel)]="dataEdicao" (change)="buscarHorariosEdicao(item)" />
+              </div>
+            </div>
+
+            <div class="horarios-grid" *ngIf="horariosEdicao.length > 0">
+              <button
+                *ngFor="let horario of horariosEdicao"
+                class="horario-btn"
+                [class.ocupado]="!horario.disponivel"
+                [class.selecionado]="horarioEdicao?.hora === horario.hora"
+                [disabled]="!horario.disponivel"
+                (click)="selecionarHorarioEdicao(horario)"
+              >
+                {{ horario.hora }}
+              </button>
+            </div>
+
+            <div class="edicao-buttons">
+              <button class="save-button" (click)="confirmarEdicao()">Confirmar</button>
+              <button class="cancel-button" (click)="fecharEdicao()">Cancelar</button>
+            </div>
           </div>
         </div>
 
-        <div class="card-body">
-          <div class="info">
-            <strong> Horário </strong>
-
-            <p>
-              {{ item.inicio }}
-            </p>
-          </div>
-
-          <div class="info">
-            <strong> Profissional </strong>
-
-            <p>
-              {{ item.profissional?.nome }}
-            </p>
-          </div>
-        </div>
-
-        <button *ngIf="role === 'ADMIN'" class="cancel-button" (click)="cancelar(item.id)">
-          Cancelar reserva
-        </button>
+        <p *ngIf="agendamentos.length === 0" class="vazio">Nenhum agendamento encontrado.</p>
       </div>
     </div>
   </main>
