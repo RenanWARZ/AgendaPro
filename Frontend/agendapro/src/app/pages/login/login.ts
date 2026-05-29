@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../service/auth.service';
+import { WebsocketService } from '../../../service/websocket.service';
 
 @Component({
   selector: 'app-login',
@@ -12,53 +13,48 @@ import { AuthService } from '../../../service/auth.service';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
+
 export class Login {
   isCadastro = false;
-
   email = '';
-
   senha = '';
 
   usuario = {
     nome: '',
-
     email: '',
-
     senha: '',
-
     documento: '',
-
     tipoPessoa: 'CPF',
   };
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private wsService: WebsocketService
   ) {}
 
   entrar() {
     const dados = {
       email: this.email,
-
       senha: this.senha,
     };
 
     this.authService.login(dados).subscribe({
       next: (res: any) => {
-        localStorage.setItem('usuario', JSON.stringify(res));
+    localStorage.setItem('usuario', JSON.stringify(res));
+    localStorage.setItem('usuarioId', res.id);
+    localStorage.setItem('role', res.role);
 
-        localStorage.setItem('usuarioId', res.id);
+    this.wsService.conectar(res.id, res.role);
 
-        localStorage.setItem('role', res.role);
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Sucesso',
-          text: 'Login realizado',
-        });
-
-        this.router.navigate(['/agendamentos']);
-      },
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso',
+      text: 'Login realizado',
+    }).then(() => {
+      this.router.navigate(['/agendamentos']);
+    });
+  },
 
       error: (err) => {
         Swal.fire({
@@ -142,13 +138,9 @@ export class Login {
     let valor = event.target.value;
 
     valor = valor.replace(/\D/g, '');
-
     valor = valor.substring(0, 11);
-
     valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-
     valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-
     valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
 
     this.usuario.documento = valor;
@@ -158,15 +150,10 @@ export class Login {
     let valor = event.target.value;
 
     valor = valor.replace(/\D/g, '');
-
     valor = valor.substring(0, 14);
-
     valor = valor.replace(/^(\d{2})(\d)/, '$1.$2');
-
     valor = valor.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-
     valor = valor.replace(/\.(\d{3})(\d)/, '.$1/$2');
-
     valor = valor.replace(/(\d{4})(\d)/, '$1-$2');
 
     this.usuario.documento = valor;
