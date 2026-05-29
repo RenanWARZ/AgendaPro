@@ -1,10 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
-import Swal from 'sweetalert2';
 import { ServicoService } from '../../../service/servico.service';
 import { AgendamentoService } from '../../../service/agendamento.service';
+import { WebsocketService } from '../../../service/websocket.service';
+import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-agendamentos',
@@ -13,7 +15,7 @@ import { AgendamentoService } from '../../../service/agendamento.service';
   templateUrl: './agendamentos.html',
   styleUrl: './agendamentos.css',
 })
-export class Agendamentos implements OnInit {
+export class Agendamentos implements OnInit, OnDestroy {
   role = '';
 
   agendamentos: any[] = [];
@@ -26,6 +28,8 @@ export class Agendamentos implements OnInit {
   horarioEdicao: any = null;
   horariosEdicao: any[] = [];
 
+  private inscrito = false;
+
   agendamento = {
     inicio: '',
     cliente: { id: 0 },
@@ -33,24 +37,66 @@ export class Agendamentos implements OnInit {
     servico: { id: 0 },
   };
 
+  private subs: Subscription[] = [];
+
   constructor(
     private agendamentoService: AgendamentoService,
     private servicoService: ServicoService,
     private router: Router,
     private cd: ChangeDetectorRef,
+    private wsService: WebsocketService
   ) {}
 
-  ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      this.role = localStorage.getItem('role') || '';
 
-      Promise.resolve().then(() => {
-        this.listarAgendamentos();
-        this.listarServicos();
+ngOnInit(): void {
+  if (typeof window !== 'undefined') {
+    this.role = localStorage.getItem('role') || '';
 
-        this.cd.detectChanges();
-      });
-    }
+    Promise.resolve().then(() => {
+      this.listarAgendamentos();
+      this.listarServicos();
+      this.cd.detectChanges();
+
+      if (!this.inscrito) {
+        this.inscrito = true;
+
+        this.subs.push(
+          this.wsService.notificacaoAdmin$.subscribe((notificacao) => {
+            Swal.fire({
+              icon: 'info',
+              title: '📅 Novo Agendamento!',
+              text: notificacao.mensagem,
+              timer: 8000,
+              showCloseButton: true,
+              showConfirmButton: false,
+              toast: true,
+              position: 'top-end',
+            });
+            this.listarAgendamentos();
+          })
+        );
+
+        this.subs.push(
+          this.wsService.notificacaoUsuario$.subscribe((notificacao) => {
+            const icone = notificacao.tipo === 'CANCELAMENTO' ? 'warning' : 'success';
+            Swal.fire({
+              icon: icone,
+              title: notificacao.tipo === 'CANCELAMENTO' ? '❌ Agendamento Cancelado' : '✏️ Agendamento Atualizado',
+              text: notificacao.mensagem,
+              timer: 8000,
+              showConfirmButton: false,
+              toast: true,
+              position: 'top-end',
+            });
+            this.listarAgendamentos();
+          })
+        );
+      }
+    });
+  }
+}
+  ngOnDestroy(): void {
+    this.subs.forEach(s => s.unsubscribe());
   }
 
   listarAgendamentos() {
@@ -77,26 +123,16 @@ export class Agendamentos implements OnInit {
   }
 
   buscarHorarios() {
-    console.log('DATA:', this.dataSelecionada);
-    console.log('SERVICO:', this.agendamento.servico.id);
-
-    if (!this.dataSelecionada || this.agendamento.servico.id === 0) {
-      console.log('BLOQUEOU');
-      return;
-    }
+    if (!this.dataSelecionada || this.agendamento.servico.id === 0) return;
 
     this.agendamentoService
       .listarHorarios(this.agendamento.servico.id, this.dataSelecionada)
       .subscribe({
         next: (res: any) => {
-          console.log('HORARIOS BACKEND:', res);
-
           this.horariosDisponiveis = res;
+          this.cd.detectChanges();
         },
-
-        error: (err) => {
-          console.error('ERRO HORARIOS:', err);
-        },
+        error: (err) => console.error('ERRO HORARIOS:', err),
       });
   }
 
