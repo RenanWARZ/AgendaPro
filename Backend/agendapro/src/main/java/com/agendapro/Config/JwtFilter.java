@@ -61,4 +61,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         return header.replace("Bearer ", "");
     }
+
+    // ← ADICIONE ESSE MÉTODO
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        return (method.equals("POST") && path.equals("/auth/login")) ||
+                (method.equals("POST") && path.equals("/usuarios")) ||
+                path.startsWith("/ws");
+    }
 }
