@@ -24,7 +24,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ← corrigido
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
@@ -33,13 +33,14 @@ public class SecurityConfig {
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        // Webhook do Mercado Pago — sem autenticação JWT
+                        .requestMatchers(HttpMethod.POST, "/pagamentos/webhook").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
-
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("USUARIO")
                         .requestMatchers(HttpMethod.PUT, "/agendamentos/**").hasRole("USUARIO")
-
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

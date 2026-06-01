@@ -10,18 +10,18 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
-
     private Double valor;
-
     private String status;
-
     private String metodo;
+    private String externalId;
+    private String pixQrCode;
+    private String pixQrCodeTexto;
 
     @OneToOne
     @JoinColumn(name = "agendamento_id")
