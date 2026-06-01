@@ -113,9 +113,15 @@
           </div>
 
           <div class="card-actions" *ngIf="role === 'USUARIO' && item.status !== 'CANCELADO'">
-            <button class="edit-button" (click)="abrirEdicao(item)"><i class="bi bi-pencil-fill"></i> Editar</button>
-
-            <button class="cancel-button" (click)="cancelar(item.id)"><i class="bi bi-x-circle-fill"></i> Cancelar</button>
+            <button class="edit-button" (click)="abrirEdicao(item)">
+              <i class="bi bi-pencil-fill"></i> Editar
+            </button>
+            <button class="pay-action-btn" (click)="abrirCheckout(item)">
+              💳 Pagar
+            </button>
+            <button class="cancel-button" (click)="cancelar(item.id)">
+              <i class="bi bi-x-circle-fill"></i> Cancelar
+            </button>
           </div>
 
           <div class="edicao-form" *ngIf="editandoId === item.id">
@@ -153,3 +159,12 @@
     </div>
   </main>
 </div>
+
+<app-checkout
+  *ngIf="checkoutAberto && agendamentoParaPagar"
+  [agendamentoId]="agendamentoParaPagar.id"
+  [valor]="agendamentoParaPagar.servico.preco"
+  [nomeServico]="agendamentoParaPagar.servico.nome"
+  (fechar)="checkoutAberto = false"
+  (pagoCom)="onPagamentoConcluido($event)"
+/>

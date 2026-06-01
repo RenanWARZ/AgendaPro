@@ -1,0 +1,366 @@
+/* ── Overlay ─────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* ── Caixa do modal ──────────────────────────── */
+.modal-box {
+  background: #fff;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── Header ──────────────────────────────────── */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.servico-nome {
+  font-size: 13px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.valor-badge {
+  margin-left: auto;
+  background: #f3f0ff;
+  color: #6d28d9;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 6px 16px;
+  border-radius: 12px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #aaa;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* ── Etapa ───────────────────────────────────── */
+.etapa {
+  padding: 24px 28px 28px;
+}
+
+.label-section {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 14px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #6d28d9;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 18px;
+  display: block;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* ── Métodos de pagamento ────────────────────── */
+.metodos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.metodo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 18px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.metodo-card:hover {
+  border-color: #6d28d9;
+  background: #f3f0ff;
+}
+
+.metodo-icon {
+  font-size: 28px;
+}
+
+.metodo-card strong {
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.metodo-card small {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ── Formulários ─────────────────────────────── */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  background: #fafafa;
+  transition: 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #6d28d9;
+  background: #fff;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Botão principal ─────────────────────────── */
+.pay-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 18px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pay-btn.pix {
+  background: linear-gradient(135deg, #00b4d8, #00897b);
+  color: white;
+}
+
+.pay-btn.pix:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.pay-btn.cartao {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: white;
+}
+
+.pay-btn.cartao:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* ── Spinner ─────────────────────────────────── */
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── QR Code Pix ─────────────────────────────── */
+.pix-aguardando {
+  text-align: center;
+}
+
+.qr-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0 18px;
+}
+
+.qr-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
+  border: 2px solid #e5e5e5;
+}
+
+.copia-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.copia-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.copia-texto {
+  flex: 1;
+  font-size: 12px;
+  color: #555;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: #6d28d9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── Polling info ────────────────────────────── */
+.polling-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.dot-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00b4d8;
+  animation: pulse 1.2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+
+/* ── Resultado ───────────────────────────────── */
+.resultado {
+  text-align: center;
+  padding: 40px 28px;
+}
+
+.resultado-icon {
+  font-size: 56px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.resultado-aprovado h3,
+.resultado-recusado h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.resultado-aprovado h3 {
+  color: #059669;
+}
+
+.resultado-recusado h3 {
+  color: #dc2626;
+}
+
+.resultado-aprovado p,
+.resultado-recusado p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 4px;
+}
