@@ -7,11 +7,12 @@ import { AgendamentoService } from '../../../service/agendamento.service';
 import { WebsocketService } from '../../../service/websocket.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { Checkout } from '../checkout/checkout';
 
 @Component({
   selector: 'app-agendamentos',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, Checkout],
   templateUrl: './agendamentos.html',
   styleUrl: './agendamentos.css',
 })
@@ -27,6 +28,10 @@ export class Agendamentos implements OnInit, OnDestroy {
   dataEdicao = '';
   horarioEdicao: any = null;
   horariosEdicao: any[] = [];
+
+  // ── Checkout ──────────────────────────────────
+  checkoutAberto = false;
+  agendamentoParaPagar: any = null;
 
   private inscrito = false;
 
@@ -44,59 +49,62 @@ export class Agendamentos implements OnInit, OnDestroy {
     private servicoService: ServicoService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private wsService: WebsocketService
+    private wsService: WebsocketService,
   ) {}
 
+  ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.role = localStorage.getItem('role') || '';
 
-ngOnInit(): void {
-  if (typeof window !== 'undefined') {
-    this.role = localStorage.getItem('role') || '';
+      Promise.resolve().then(() => {
+        this.listarAgendamentos();
+        this.listarServicos();
+        this.cd.detectChanges();
 
-    Promise.resolve().then(() => {
-      this.listarAgendamentos();
-      this.listarServicos();
-      this.cd.detectChanges();
+        if (!this.inscrito) {
+          this.inscrito = true;
 
-      if (!this.inscrito) {
-        this.inscrito = true;
+          this.subs.push(
+            this.wsService.notificacaoAdmin$.subscribe((notificacao) => {
+              Swal.fire({
+                icon: 'info',
+                title: '📅 Novo Agendamento!',
+                text: notificacao.mensagem,
+                timer: 8000,
+                showCloseButton: true,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+              });
+              this.listarAgendamentos();
+            }),
+          );
 
-        this.subs.push(
-          this.wsService.notificacaoAdmin$.subscribe((notificacao) => {
-            Swal.fire({
-              icon: 'info',
-              title: '📅 Novo Agendamento!',
-              text: notificacao.mensagem,
-              timer: 8000,
-              showCloseButton: true,
-              showConfirmButton: false,
-              toast: true,
-              position: 'top-end',
-            });
-            this.listarAgendamentos();
-          })
-        );
-
-        this.subs.push(
-          this.wsService.notificacaoUsuario$.subscribe((notificacao) => {
-            const icone = notificacao.tipo === 'CANCELAMENTO' ? 'warning' : 'success';
-            Swal.fire({
-              icon: icone,
-              title: notificacao.tipo === 'CANCELAMENTO' ? '❌ Agendamento Cancelado' : '✏️ Agendamento Atualizado',
-              text: notificacao.mensagem,
-              timer: 8000,
-              showConfirmButton: false,
-              toast: true,
-              position: 'top-end',
-            });
-            this.listarAgendamentos();
-          })
-        );
-      }
-    });
+          this.subs.push(
+            this.wsService.notificacaoUsuario$.subscribe((notificacao) => {
+              const icone = notificacao.tipo === 'CANCELAMENTO' ? 'warning' : 'success';
+              Swal.fire({
+                icon: icone,
+                title:
+                  notificacao.tipo === 'CANCELAMENTO'
+                    ? '❌ Agendamento Cancelado'
+                    : '✏️ Agendamento Atualizado',
+                text: notificacao.mensagem,
+                timer: 8000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+              });
+              this.listarAgendamentos();
+            }),
+          );
+        }
+      });
+    }
   }
-}
+
   ngOnDestroy(): void {
-    this.subs.forEach(s => s.unsubscribe());
+    this.subs.forEach((s) => s.unsubscribe());
   }
 
   listarAgendamentos() {
@@ -132,7 +140,7 @@ ngOnInit(): void {
           this.horariosDisponiveis = res;
           this.cd.detectChanges();
         },
-        error: (err) => console.error('ERRO HORARIOS:', err),
+        error: (err: any) => console.error('ERRO HORARIOS:', err),
       });
   }
 
@@ -173,7 +181,7 @@ ngOnInit(): void {
         this.resetarFormulario();
         this.listarAgendamentos();
       },
-      error: (err) => {
+      error: (err: any) => {
         Swal.fire({ icon: 'error', title: 'Erro', text: err.error });
       },
     });
@@ -223,7 +231,7 @@ ngOnInit(): void {
         this.fecharEdicao();
         this.listarAgendamentos();
       },
-      error: (err) => {
+      error: (err: any) => {
         Swal.fire({ icon: 'error', title: 'Erro', text: err.error });
       },
     });
@@ -245,6 +253,25 @@ ngOnInit(): void {
         });
       }
     });
+  }
+
+  // ── Checkout ──────────────────────────────────
+  abrirCheckout(item: any) {
+    this.agendamentoParaPagar = item;
+    this.checkoutAberto = true;
+  }
+
+  onPagamentoConcluido(status: string) {
+    this.checkoutAberto = false;
+    this.agendamentoParaPagar = null;
+    if (status === 'APROVADO') {
+      Swal.fire({
+        icon: 'success',
+        title: '✅ Pagamento aprovado!',
+        text: 'Seu agendamento está confirmado.',
+      });
+      this.listarAgendamentos();
+    }
   }
 
   resetarFormulario() {
