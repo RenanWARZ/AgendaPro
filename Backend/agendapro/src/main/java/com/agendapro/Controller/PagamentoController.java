@@ -27,4 +27,14 @@ public class PagamentoController {
         return ResponseEntity.ok(service.consultarStatus(agendamentoId));
     }
 
+    @PostMapping("/webhook")
+    public ResponseEntity<Void> webhook(@RequestBody Map<String, Object> payload) {
+        if ("payment".equals(payload.get("type"))) {
+            Map<?, ?> data = (Map<?, ?>) payload.get("data");
+            if (data != null && data.get("id") != null) {
+                service.processarWebhook(data.get("id").toString());
+            }
+        }
+        return ResponseEntity.ok().build();
+    }
 }
