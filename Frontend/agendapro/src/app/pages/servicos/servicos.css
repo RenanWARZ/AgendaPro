@@ -94,6 +94,12 @@ nav .active {
   background: #440000;
 }
 
+.save-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
 .content {
   flex: 1;
   padding: 40px;
@@ -179,6 +185,7 @@ nav .active {
 }
 
 .form-grid input {
+  margin-top: 8px;
   width: 100%;
   padding: 18px;
   border-radius: 16px;
@@ -188,8 +195,9 @@ nav .active {
   transition: 0.3s;
 }
 
-.form-grid input:focus {
-  border-color: #3200c7;
+.form-grid input:hover {
+  border-color: #6d3bff;
+  box-shadow: 0 20px 40px rgba(109, 59, 255, 0.15), 0 0 0 4px rgba(109, 59, 255, 0.08);
 }
 
 .full-width {
@@ -201,6 +209,14 @@ nav .active {
   margin-bottom: 10px;
   font-weight: 600;
   color: #333;
+}
+
+.horarios{
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 20px;
+  display: flex;
+  gap: 50px;
 }
 
 .days-grid {
@@ -224,7 +240,8 @@ nav .active {
 }
 
 .day-item:hover {
-  background: #e7e7e7;
+  color: white;
+  background: #1f0179;
 }
 
 .day-item input {
@@ -331,7 +348,7 @@ nav .active {
 }
 
 .link {
-  color: #000158;
+  color: #000080;
   font-weight: bold;
   text-decoration: none;
 }
@@ -391,19 +408,19 @@ nav .active {
 }
 
 .edit-button {
-  background: #c7ba00;
+  background: #ffd700;
 }
 
 .edit-button:hover {
-  background: #7a7200;
+  background: #e6c619;
 }
 
 .delete-button {
-  background: #dc2626;
+  background: #d11507;
 }
 
 .delete-button:hover {
-  background: #991b1b;
+  background: #a51b0b;
 }
 
 @media (max-width: 1100px) {
