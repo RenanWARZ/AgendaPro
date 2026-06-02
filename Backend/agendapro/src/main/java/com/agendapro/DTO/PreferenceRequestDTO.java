@@ -6,15 +6,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagamentoRequestDTO {
+public class PreferenceRequestDTO {
 
     private Long agendamentoId;
     private Double valor;
-    private String metodo;
-    private String cardToken;
-    private Integer installments;
-    private String issuerId;
+    private String nomeServico;
     private String pagadorEmail;
-    private String pagadorDocumento;
     private String pagadorNome;
 }

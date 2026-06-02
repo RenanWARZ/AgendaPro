@@ -27,20 +27,28 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // Webhook do Mercado Pago — sem autenticação JWT
+                        // Webhooks do Mercado Pago — sem autenticação JWT
                         .requestMatchers(HttpMethod.POST, "/pagamentos/webhook").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/checkout/webhook").permitAll()
 
+                        // Checkout Pro
+                        .requestMatchers(HttpMethod.POST, "/checkout/criar-preferencia").authenticated()
+                        .requestMatchers(HttpMethod.GET,  "/checkout/status/**").authenticated()
+
+                        // Serviços — apenas ADMIN
                         .requestMatchers(HttpMethod.POST, "/servicos").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/servicos/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/servicos/**").hasRole("ADMIN")
+
+                        // Agendamentos — apenas USUARIO
                         .requestMatchers(HttpMethod.POST, "/agendamentos").hasRole("USUARIO")
                         .requestMatchers(HttpMethod.PUT, "/agendamentos/**").hasRole("USUARIO")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
