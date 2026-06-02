@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { ServicoService } from '../../../service/servico.service';
 import { AgendamentoService } from '../../../service/agendamento.service';
 import { WebsocketService } from '../../../service/websocket.service';
@@ -18,7 +18,6 @@ import { Checkout } from '../checkout/checkout';
 })
 export class Agendamentos implements OnInit, OnDestroy {
   role = '';
-
   agendamentos: any[] = [];
   servicos: any[] = [];
   horariosDisponiveis: any[] = [];
@@ -28,8 +27,6 @@ export class Agendamentos implements OnInit, OnDestroy {
   dataEdicao = '';
   horarioEdicao: any = null;
   horariosEdicao: any[] = [];
-
-  // ── Checkout ──────────────────────────────────
   checkoutAberto = false;
   agendamentoParaPagar: any = null;
 
@@ -48,6 +45,7 @@ export class Agendamentos implements OnInit, OnDestroy {
     private agendamentoService: AgendamentoService,
     private servicoService: ServicoService,
     private router: Router,
+    private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
     private wsService: WebsocketService,
   ) {}
@@ -55,6 +53,30 @@ export class Agendamentos implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       this.role = localStorage.getItem('role') || '';
+
+      // Verifica retorno do Mercado Pago
+      this.route.queryParams.subscribe((params) => {
+        const pagamento = params['pagamento'];
+        const agendamentoId = params['agendamentoId'];
+        if (pagamento === 'sucesso') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Pagamento aprovado! ✅',
+            text: `Agendamento #${agendamentoId} confirmado.`,
+          });
+          this.router.navigate(['/agendamentos'], { replaceUrl: true });
+        } else if (pagamento === 'falha') {
+          Swal.fire({ icon: 'error', title: 'Pagamento não aprovado', text: 'Tente novamente.' });
+          this.router.navigate(['/agendamentos'], { replaceUrl: true });
+        } else if (pagamento === 'pendente') {
+          Swal.fire({
+            icon: 'info',
+            title: 'Pagamento pendente ⏳',
+            text: 'Avisaremos quando for confirmado.',
+          });
+          this.router.navigate(['/agendamentos'], { replaceUrl: true });
+        }
+      });
 
       Promise.resolve().then(() => {
         this.listarAgendamentos();
@@ -255,23 +277,16 @@ export class Agendamentos implements OnInit, OnDestroy {
     });
   }
 
-  // ── Checkout ──────────────────────────────────
   abrirCheckout(item: any) {
     this.agendamentoParaPagar = item;
     this.checkoutAberto = true;
+    this.cd.detectChanges();
   }
 
-  onPagamentoConcluido(status: string) {
+  fecharCheckout() {
     this.checkoutAberto = false;
     this.agendamentoParaPagar = null;
-    if (status === 'APROVADO') {
-      Swal.fire({
-        icon: 'success',
-        title: '✅ Pagamento aprovado!',
-        text: 'Seu agendamento está confirmado.',
-      });
-      this.listarAgendamentos();
-    }
+    this.cd.detectChanges();
   }
 
   resetarFormulario() {
