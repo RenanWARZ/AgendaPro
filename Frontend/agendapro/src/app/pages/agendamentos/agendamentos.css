@@ -133,39 +133,12 @@ nav .active {
   margin: 2rem 0 1rem;
 }
 
-.edicao-form {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #eee;
-}
-
-.edicao-form h4 {
-  margin-bottom: 0.75rem;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-.edicao-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
 
 .card-actions {
-  display: flex;
+  display: inline-flex;
+  margin-bottom: 25px;
   gap: 0.5rem;
   margin-top: 1rem;
-}
-
-.edit-button {
-  background: #3182ce;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.9rem;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 .cancelado {
@@ -245,6 +218,36 @@ nav .active {
 
 .pay-button:hover {
   background: #15803d;
+}
+
+.edit-button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #ddbb00;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-button:hover {
+  background: #e5e619;
+}
+
+.pay-button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #14c900;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.pay-button:hover {
+  background: #1b8800;
 }
 
 .cancel-button {
@@ -539,11 +542,10 @@ nav .active {
   gap: 15px;
 }
 
-.avatar {
+.avatar img {
   width: 55px;
   height: 55px;
   border-radius: 16px;
-  background: rgba(109, 59, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;

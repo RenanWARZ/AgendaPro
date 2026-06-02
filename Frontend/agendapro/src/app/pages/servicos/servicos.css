@@ -408,11 +408,11 @@ nav .active {
 }
 
 .edit-button {
-  background: #ffd700;
+  background: #ddbb00;
 }
 
 .edit-button:hover {
-  background: #e6c619;
+  background: #bda204;
 }
 
 .delete-button {

@@ -86,7 +86,7 @@
         <div class="agendamento-card" *ngFor="let item of agendamentos">
           <div class="card-header">
             <div class="user-info">
-              <div class="avatar">👤</div>
+              <div class="avatar"><img src="assets/perfil2.png" alt="" /></div>
               <div>
                 <h3>{{ item.cliente?.nome }}</h3>
                 <span>{{ item.servico?.nome }}</span>
@@ -113,13 +113,9 @@
           </div>
 
           <div class="card-actions" *ngIf="role === 'USUARIO' && item.status !== 'CANCELADO'">
-            <button class="edit-button" (click)="abrirEdicao(item)">
-              <i class="bi bi-pencil-fill"></i> Editar
-            </button>
-            <button class="pay-action-btn" (click)="abrirCheckout(item)">💳 Pagar</button>
-            <button class="cancel-button" (click)="cancelar(item.id)">
-              <i class="bi bi-x-circle-fill"></i> Cancelar
-            </button>
+            <button class="edit-button" (click)="abrirEdicao(item)">​ ✏️​ Editar</button>
+            <button class="pay-button" (click)="abrirCheckout(item)">💳 Pagar</button>
+            <button class="cancel-button" (click)="cancelar(item.id)">​ ❌​ Cancelar</button>
           </div>
 
           <div class="edicao-form" *ngIf="editandoId === item.id">
