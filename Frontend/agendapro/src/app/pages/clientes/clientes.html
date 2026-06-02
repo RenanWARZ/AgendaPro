@@ -18,7 +18,7 @@
 
   <main class="content">
     <div class="topbar">
-      <div>
+      <div class="boinfo">
         <h1>Clientes Agendados</h1>
         <p>Veja quem agendou seus serviços.</p>
       </div>
@@ -40,7 +40,8 @@
           <div class="avatar">
             <img src="assets/perfil.png" alt="" />
           </div>
-          <div>
+
+          <div class="cliente-info">
             <h3>{{ item.cliente?.nome }}</h3>
             <span>{{ item.servico?.nome }}</span>
           </div>
@@ -49,13 +50,23 @@
         <div class="cliente-body">
 
           <div class="info">
-            <strong>E-mail</strong>
+            <strong>Email</strong>
             <p>{{ item.cliente?.email }}</p>
           </div>
 
           <div class="info">
-            <strong>Horário</strong>
-            <p>{{ item.inicio | date: 'dd/MM/yyyy HH:mm' }}</p>
+            <strong>CPF</strong>
+            <p>{{ formatarCpf(item.cliente?.documento) }}</p>
+          </div>
+
+          <div class="info">
+            <strong>Agendado para:</strong>
+            <p>{{ item.inicio | date: 'dd/MM/yyyy' }}</p>
+          </div>
+
+          <div class="info">
+            <strong>No horário:</strong>
+            <p>{{ item.inicio | date: ' HH:mm' }}</p>
           </div>
 
           <div class="info">

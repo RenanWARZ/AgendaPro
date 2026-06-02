@@ -49,6 +49,18 @@ body {
   padding-left: 10px;
 }
 
+.boinfo{
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.boinfo h1 {
+  color: #1f0179 !important;
+  font-size: 24px;
+}
+
 .logo h2 {
   font-size: 28px;
 }
@@ -111,7 +123,6 @@ nav .active {
   transition: 0.3s;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   min-height: 100%;
 }
 
@@ -138,6 +149,12 @@ nav .active {
   font-size: 26px;
 }
 
+.cliente-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .cliente-header h3 {
   color: #10231d;
   margin-bottom: 5px;
@@ -148,6 +165,11 @@ nav .active {
   font-size: 14px;
 }
 
+.cliente-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .info strong {
   display: block;
   margin-bottom: 5px;
@@ -156,6 +178,20 @@ nav .active {
 
 .info p {
   color: #6b7280;
+}
+
+.cancelado {
+  background: #fed7d7;
+  color: red !important;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.agendado {
+  background: #c6f6d5;
+  color: green !important;
+  border-radius: 8px;
+  width: fit-content;
 }
 
 .logout-button {
@@ -195,7 +231,7 @@ nav .active {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   max-width: 300px;
 }
 
@@ -205,9 +241,11 @@ nav .active {
   border: 1px solid #ddd;
 }
 
-/* =========================
-   RESPONSIVIDADE
-========================= */
+.filtro-section select:hover {
+  border-color: #6d3bff;
+  box-shadow: 0 20px 40px rgba(109, 59, 255, 0.15), 0 0 0 4px rgba(109, 59, 255, 0.08);
+}
+
 @media (max-width: 1100px) {
   .content {
     padding: 25px;

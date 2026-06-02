@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './clientes.html',
   styleUrl: './clientes.css',
 })
-
 export class Clientes implements OnInit {
   agendamentos: any[] = [];
   servicos: any[] = [];
@@ -62,5 +61,13 @@ export class Clientes implements OnInit {
   sair() {
     localStorage.clear();
     this.router.navigate(['/login']);
+  }
+
+  formatarCpf(cpf: string): string {
+    if (!cpf) return '';
+
+    cpf = cpf.replace(/\D/g, '');
+
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   }
 }
