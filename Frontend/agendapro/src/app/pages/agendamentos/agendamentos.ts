@@ -7,12 +7,12 @@ import { AgendamentoService } from '../../../service/agendamento.service';
 import { WebsocketService } from '../../../service/websocket.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Checkout } from '../checkout/checkout';
+import { MeusAgendamentos } from '../meus-agendamentos/meus-agendamentos';
 
 @Component({
   selector: 'app-agendamentos',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink, Checkout],
+  imports: [FormsModule, CommonModule, RouterLink, MeusAgendamentos],
   templateUrl: './agendamentos.html',
   styleUrl: './agendamentos.css',
 })
@@ -23,14 +23,6 @@ export class Agendamentos implements OnInit, OnDestroy {
   horariosDisponiveis: any[] = [];
   horarioSelecionado: any = null;
   dataSelecionada = '';
-  editandoId: number | null = null;
-  dataEdicao = '';
-  horarioEdicao: any = null;
-  horariosEdicao: any[] = [];
-  checkoutAberto = false;
-  agendamentoParaPagar: any = null;
-
-  private inscrito = false;
 
   agendamento = {
     inicio: '',
@@ -40,6 +32,7 @@ export class Agendamentos implements OnInit, OnDestroy {
   };
 
   private subs: Subscription[] = [];
+  private inscrito = false;
 
   constructor(
     private agendamentoService: AgendamentoService,
@@ -51,10 +44,12 @@ export class Agendamentos implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      this.role = localStorage.getItem('role') || '';
+    if (typeof window === 'undefined') return;
 
-      // Verifica retorno do Mercado Pago
+    this.role = localStorage.getItem('role') || '';
+
+    // Retorno do Mercado Pago
+    this.subs.push(
       this.route.queryParams.subscribe((params) => {
         const pagamento = params['pagamento'];
         const agendamentoId = params['agendamentoId'];
@@ -76,65 +71,65 @@ export class Agendamentos implements OnInit, OnDestroy {
           });
           this.router.navigate(['/agendamentos'], { replaceUrl: true });
         }
-      });
+      }),
+    );
 
-      Promise.resolve().then(() => {
-        this.listarAgendamentos();
-        this.listarServicos();
-        this.cd.detectChanges();
+    Promise.resolve().then(() => {
+      this.listarAgendamentos();
+      this.listarServicos();
+      this.cd.detectChanges();
 
-        if (!this.inscrito) {
-          this.inscrito = true;
+      if (!this.inscrito) {
+        this.inscrito = true;
+        const usuarioId = Number(localStorage.getItem('usuarioId'));
+        this.wsService.conectar(usuarioId, this.role);
 
-          this.subs.push(
-            this.wsService.notificacaoAdmin$.subscribe((notificacao) => {
-              Swal.fire({
-                icon: 'info',
-                title: '📅 Novo Agendamento!',
-                text: notificacao.mensagem,
-                timer: 8000,
-                showCloseButton: true,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-              });
-              this.listarAgendamentos();
-            }),
-          );
+        this.subs.push(
+          this.wsService.notificacaoAdmin$.subscribe((n) => {
+            Swal.fire({
+              icon: 'info',
+              title: '📅 Novo Agendamento!',
+              text: n.mensagem,
+              timer: 8000,
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              showCloseButton: true,
+            });
+            this.listarAgendamentos();
+          }),
+        );
 
-          this.subs.push(
-            this.wsService.notificacaoUsuario$.subscribe((notificacao) => {
-              const icone = notificacao.tipo === 'CANCELAMENTO' ? 'warning' : 'success';
-              Swal.fire({
-                icon: icone,
-                title:
-                  notificacao.tipo === 'CANCELAMENTO'
-                    ? '❌ Agendamento Cancelado'
-                    : '✏️ Agendamento Atualizado',
-                text: notificacao.mensagem,
-                timer: 8000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-              });
-              this.listarAgendamentos();
-            }),
-          );
-        }
-      });
-    }
+        this.subs.push(
+          this.wsService.notificacaoUsuario$.subscribe((n) => {
+            Swal.fire({
+              icon: n.tipo === 'CANCELAMENTO' ? 'warning' : 'success',
+              title:
+                n.tipo === 'CANCELAMENTO'
+                  ? '❌ Agendamento Cancelado'
+                  : '✏️ Agendamento Atualizado',
+              text: n.mensagem,
+              timer: 8000,
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+            });
+            this.listarAgendamentos();
+          }),
+        );
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.subs.forEach((s) => s.unsubscribe());
+    this.wsService.desconectar();
+    this.inscrito = false;
   }
 
   listarAgendamentos() {
-    if (typeof window === 'undefined') return;
-
     const usuarioId = localStorage.getItem('usuarioId');
     if (!usuarioId) return;
-
     this.agendamentoService.listar(usuarioId).subscribe((res: any) => {
       this.agendamentos = res;
       this.cd.detectChanges();
@@ -142,8 +137,6 @@ export class Agendamentos implements OnInit, OnDestroy {
   }
 
   listarServicos() {
-    if (typeof window === 'undefined') return;
-
     setTimeout(() => {
       this.servicoService.listarTodos().subscribe((res: any) => {
         this.servicos = res;
@@ -154,7 +147,6 @@ export class Agendamentos implements OnInit, OnDestroy {
 
   buscarHorarios() {
     if (!this.dataSelecionada || this.agendamento.servico.id === 0) return;
-
     this.agendamentoService
       .listarHorarios(this.agendamento.servico.id, this.dataSelecionada)
       .subscribe({
@@ -162,7 +154,6 @@ export class Agendamentos implements OnInit, OnDestroy {
           this.horariosDisponiveis = res;
           this.cd.detectChanges();
         },
-        error: (err: any) => console.error('ERRO HORARIOS:', err),
       });
   }
 
@@ -179,11 +170,8 @@ export class Agendamentos implements OnInit, OnDestroy {
   }
 
   salvar() {
-    if (typeof window === 'undefined') return;
-
     const usuarioId = localStorage.getItem('usuarioId');
     this.agendamento.cliente.id = Number(usuarioId);
-
     if (!this.dataSelecionada) {
       Swal.fire({ icon: 'warning', title: 'Selecione uma data' });
       return;
@@ -203,99 +191,13 @@ export class Agendamentos implements OnInit, OnDestroy {
         this.resetarFormulario();
         this.listarAgendamentos();
       },
-      error: (err: any) => {
-        Swal.fire({ icon: 'error', title: 'Erro', text: err.error });
-      },
+      error: (err: any) =>
+        Swal.fire({ icon: 'error', title: 'Erro', text: err.error?.message || err.error }),
     });
-  }
-
-  abrirEdicao(item: any) {
-    this.editandoId = item.id;
-    this.dataEdicao = '';
-    this.horarioEdicao = null;
-    this.horariosEdicao = [];
-  }
-
-  fecharEdicao() {
-    this.editandoId = null;
-    this.dataEdicao = '';
-    this.horarioEdicao = null;
-    this.horariosEdicao = [];
-  }
-
-  buscarHorariosEdicao(item: any) {
-    if (!this.dataEdicao) return;
-
-    this.agendamentoService
-      .listarHorarios(item.servico.id, this.dataEdicao)
-      .subscribe((res: any) => {
-        this.horariosEdicao = res;
-        this.cd.detectChanges();
-      });
-  }
-
-  selecionarHorarioEdicao(horario: any) {
-    if (!horario.disponivel) return;
-    this.horarioEdicao = horario;
-  }
-
-  confirmarEdicao() {
-    if (!this.dataEdicao || !this.horarioEdicao) {
-      Swal.fire({ icon: 'warning', title: 'Selecione uma data e horário' });
-      return;
-    }
-
-    const novoInicio = `${this.dataEdicao}T${this.horarioEdicao.hora}:00`;
-
-    this.agendamentoService.editar(this.editandoId!, novoInicio).subscribe({
-      next: () => {
-        Swal.fire({ icon: 'success', title: 'Agendamento atualizado!' });
-        this.fecharEdicao();
-        this.listarAgendamentos();
-      },
-      error: (err: any) => {
-        Swal.fire({ icon: 'error', title: 'Erro', text: err.error });
-      },
-    });
-  }
-
-  cancelar(id: number) {
-    Swal.fire({
-      title: 'Cancelar agendamento?',
-      text: 'Essa ação não poderá ser desfeita.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, cancelar',
-      cancelButtonText: 'Voltar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.agendamentoService.cancelar(id).subscribe(() => {
-          Swal.fire({ icon: 'success', title: 'Agendamento cancelado' });
-          this.listarAgendamentos();
-        });
-      }
-    });
-  }
-
-  abrirCheckout(item: any) {
-    this.agendamentoParaPagar = item;
-    this.checkoutAberto = true;
-    this.cd.detectChanges();
-  }
-
-  fecharCheckout() {
-    this.checkoutAberto = false;
-    this.agendamentoParaPagar = null;
-    this.cd.detectChanges();
   }
 
   resetarFormulario() {
-    this.agendamento = {
-      inicio: '',
-      cliente: { id: 0 },
-      empresa: { id: 0 },
-      servico: { id: 0 },
-    };
+    this.agendamento = { inicio: '', cliente: { id: 0 }, empresa: { id: 0 }, servico: { id: 0 } };
     this.dataSelecionada = '';
     this.horarioSelecionado = null;
     this.horariosDisponiveis = [];
@@ -303,6 +205,7 @@ export class Agendamentos implements OnInit, OnDestroy {
 
   sair() {
     localStorage.clear();
+    this.wsService.desconectar();
     this.router.navigate(['/login']);
   }
 }

@@ -2,6 +2,9 @@ package com.agendapro.Service;
 
 import com.agendapro.DTO.PreferenceRequestDTO;
 import com.agendapro.DTO.PreferenceResponseDTO;
+import com.agendapro.Enum.StatusAgendamento;
+import com.agendapro.Exception.RecursoNaoEncontradoException;
+import com.agendapro.Exception.RegraDeNegocioException;
 import com.agendapro.Model.Agendamento;
 import com.agendapro.Model.Pagamento;
 import com.agendapro.Repository.AgendamentoRepository;
@@ -22,7 +25,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-
 public class CheckoutService {
 
     private final PagamentoRepository pagamentoRepository;
@@ -34,10 +36,19 @@ public class CheckoutService {
     @Value("${app.frontend-url:http://localhost:4200}")
     private String frontendUrl;
 
-
     public PreferenceResponseDTO criarPreferencia(PreferenceRequestDTO dto) {
+
+        // ✅ Validações antes de chamar o MP
+        if (dto.getPagadorEmail() == null || dto.getPagadorEmail().isBlank()) {
+            throw new RegraDeNegocioException("E-mail do pagador é obrigatório");
+        }
+        if (dto.getPagadorNome() == null || dto.getPagadorNome().isBlank()) {
+            throw new RegraDeNegocioException("Nome do pagador é obrigatório");
+        }
+
         Agendamento agendamento = agendamentoRepository.findById(dto.getAgendamentoId())
-                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Agendamento não encontrado: id=" + dto.getAgendamentoId()));
 
         try {
             MercadoPagoConfig.setAccessToken(accessToken);
@@ -66,6 +77,7 @@ public class CheckoutService {
                     .items(List.of(item))
                     .payer(payer)
                     .backUrls(backUrls)
+                    .autoReturn("approved")
                     .externalReference("AGENDAPRO-" + dto.getAgendamentoId())
                     .statementDescriptor("AgendaPro")
                     .build();
@@ -88,10 +100,11 @@ public class CheckoutService {
                     .build();
 
         } catch (MPApiException e) {
-            System.out.println("ERRO MP API: " + e.getApiResponse().getContent());
-            throw new RuntimeException("Erro na API do Mercado Pago: " + e.getApiResponse().getContent());
+            System.err.println("ERRO MP API: " + e.getApiResponse().getContent());
+            throw new RegraDeNegocioException(
+                    "Mercado Pago rejeitou a requisição: " + e.getApiResponse().getContent());
         } catch (MPException e) {
-            System.out.println("ERRO MP: " + e.getMessage());
+            System.err.println("ERRO MP conexão: " + e.getMessage());
             throw new RuntimeException("Erro ao conectar com Mercado Pago: " + e.getMessage());
         }
     }
@@ -106,10 +119,22 @@ public class CheckoutService {
             if (externalRef != null && externalRef.startsWith("AGENDAPRO-")) {
                 Long agendamentoId = Long.parseLong(externalRef.replace("AGENDAPRO-", ""));
 
+                Agendamento agendamento = agendamentoRepository.findById(agendamentoId).orElse(null);
+
                 pagamentoRepository.findByAgendamentoId(agendamentoId).ifPresent(pagamento -> {
-                    pagamento.setStatus(mapStatus(mpPayment.getStatus()));
+                    String novoStatus = mapStatus(mpPayment.getStatus());
+                    pagamento.setStatus(novoStatus);
                     pagamento.setExternalId(paymentId);
                     pagamentoRepository.save(pagamento);
+
+                    if (agendamento != null) {
+                        if ("APROVADO".equals(novoStatus)) {
+                            agendamento.setStatus(StatusAgendamento.CONFIRMADO);
+                        } else if ("CANCELADO".equals(novoStatus) || "RECUSADO".equals(novoStatus)) {
+                            agendamento.setStatus(StatusAgendamento.CANCELADO);
+                        }
+                        agendamentoRepository.save(agendamento);
+                    }
                 });
             }
         } catch (MPException | MPApiException e) {
@@ -126,10 +151,10 @@ public class CheckoutService {
     private String mapStatus(String status) {
         if (status == null) return "PENDENTE";
         return switch (status.toLowerCase()) {
-            case "approved"    -> "APROVADO";
-            case "rejected"    -> "RECUSADO";
-            case "cancelled"   -> "CANCELADO";
-            default            -> "PENDENTE";
+            case "approved"  -> "APROVADO";
+            case "rejected"  -> "RECUSADO";
+            case "cancelled" -> "CANCELADO";
+            default          -> "PENDENTE";
         };
     }
 }

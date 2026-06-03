@@ -2,5 +2,8 @@ package com.agendapro.Enum;
 
 public enum StatusAgendamento {
     AGENDADO,
-    CANCELADO
+    CANCELADO,
+    PENDENTE,
+    RECUSADO,
+    CONFIRMADO
 }

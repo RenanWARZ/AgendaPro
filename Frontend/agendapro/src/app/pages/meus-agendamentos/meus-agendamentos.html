@@ -1,0 +1,142 @@
+
+  <main class="content">
+    <div class="topbar">
+      <div>
+        <h1>Meus Agendamentos</h1>
+        <p>Visualize, edite ou cancele seus agendamentos.</p>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="ma-controls">
+      <div class="ma-search">
+        <span class="ma-search-icon">🔍</span>
+        <input
+          type="text"
+          placeholder="Buscar por serviço, profissional..."
+          [(ngModel)]="termoBusca"
+        />
+      </div>
+
+      <div class="ma-filters">
+        <button
+          *ngFor="let f of ['TODOS','AGENDADO','CONFIRMADO','CANCELADO']"
+          class="ma-filter-btn"
+          [class.active]="filtroStatus === f"
+          (click)="filtroStatus = $any(f)"
+        >
+          {{ f === 'TODOS' ? 'Todos' : f === 'AGENDADO' ? 'Agendado' :
+             f === 'CONFIRMADO' ? 'Confirmado' : 'Cancelado' }}
+        </button>
+        <span class="ma-count">{{ agendamentosFiltrados.length }}</span>
+      </div>
+    </div>
+
+    <!-- Grid de cards -->
+    <div class="ma-grid" *ngIf="agendamentosFiltrados.length > 0; else vazio">
+      <article
+        class="ma-card"
+        *ngFor="let item of agendamentosFiltrados; trackBy: trackById"
+        [class.ma-card--cancelado]="item.status === 'CANCELADO'"
+        [class.ma-card--confirmado]="item.status === 'CONFIRMADO'"
+      >
+        <div class="ma-card__stripe"></div>
+
+        <div class="ma-card__body">
+          <!-- Topo -->
+          <div class="ma-card__top">
+            <div class="ma-avatar">
+              <img src="assets/perfil2.png" alt="" />
+            </div>
+            <div class="ma-info">
+              <p class="ma-info__name">{{ item.cliente?.nome }}</p>
+              <p class="ma-info__service">{{ item.servico?.nome }}</p>
+              <p class="ma-info__pro">{{ item.empresa?.nome }}</p>
+            </div>
+            <span
+              class="ma-badge"
+              [class.ma-badge--agendado]="item.status === 'AGENDADO'"
+              [class.ma-badge--confirmado]="item.status === 'CONFIRMADO'"
+              [class.ma-badge--cancelado]="item.status === 'CANCELADO'"
+            >{{ item.status }}</span>
+          </div>
+
+          <!-- Data/hora -->
+          <div class="ma-card__datetime">
+            <span>📅</span>
+            <span>{{ item.inicio | date: 'dd/MM/yyyy' }}</span>
+            <span class="sep">·</span>
+            <span>🕐</span>
+            <span>{{ item.inicio | date: 'HH:mm' }}</span>
+          </div>
+
+          <!-- Ações -->
+          <div class="ma-card__actions" *ngIf="role === 'USUARIO' && item.status !== 'CANCELADO'">
+            <button class="ma-btn ma-btn--edit"   (click)="abrirEdicao(item)">✏️ Editar</button>
+            <button class="ma-btn ma-btn--pay"    (click)="abrirCheckout(item)">💳 Pagar</button>
+            <button class="ma-btn ma-btn--cancel" (click)="cancelar(item.id)">❌ Cancelar</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #vazio>
+      <div class="ma-empty">
+        <span>📭</span>
+        <p>Nenhum agendamento encontrado.</p>
+      </div>
+    </ng-template>
+  </main>
+
+<!-- ── Modal Edição ──────────────────────────────────────────────────────── -->
+<div class="modal-overlay" *ngIf="editandoId !== null" (click)="fecharEdicao()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>✏️ Editar Agendamento</h3>
+      <button class="modal-close" (click)="fecharEdicao()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="field">
+        <label>Nova data</label>
+        <input type="date" [(ngModel)]="dataEdicao" (change)="buscarHorariosEdicao()" />
+      </div>
+
+      <div *ngIf="horariosEdicao.length > 0">
+        <p class="modal-sublabel">Escolha um horário</p>
+        <div class="horarios-grid">
+          <button
+            *ngFor="let h of horariosEdicao"
+            class="horario-btn"
+            [class.ocupado]="!h.disponivel"
+            [class.selecionado]="horarioEdicao?.hora === h.hora"
+            [disabled]="!h.disponivel"
+            (click)="selecionarHorarioEdicao(h)"
+          >
+            {{ h.hora }}
+            <span *ngIf="h.disponivel">✅</span>
+            <span *ngIf="!h.disponivel">❌</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="modal-hint" *ngIf="horariosEdicao.length === 0 && dataEdicao">
+        Nenhum horário disponível para esta data.
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-button" (click)="fecharEdicao()">Cancelar</button>
+      <button class="save-button"   (click)="confirmarEdicao()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Checkout ──────────────────────────────────────────────────────────── -->
+<app-checkout
+  *ngIf="checkoutAberto && agendamentoParaPagar"
+  [agendamentoId]="agendamentoParaPagar.id"
+  [valor]="agendamentoParaPagar.servico?.preco"
+  [nomeServico]="agendamentoParaPagar.servico?.nome"
+  (fechar)="fecharCheckout()"
+/>
